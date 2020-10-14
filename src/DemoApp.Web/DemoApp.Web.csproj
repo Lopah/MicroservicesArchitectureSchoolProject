@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DemoApp.Data\DemoApp.Infrastructure.csproj" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
   </ItemGroup>
 
 </Project>

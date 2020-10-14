@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DemoApp.Data
+namespace DemoApp.Core.Models
 {
     public class Product
     {

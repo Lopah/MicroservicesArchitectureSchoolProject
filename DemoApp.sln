@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoApp.Core", "src\DemoApp.Core\DemoApp.Core.csproj", "{69EB915D-59F9-4A29-9F28-26C4D1316B71}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoApp.Data", "src\DemoApp.Data\DemoApp.Data.csproj", "{AD3A8A52-FDF5-41A9-B55A-005C82185884}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoApp.Infrastructure", "src\DemoApp.Data\DemoApp.Infrastructure.csproj", "{AD3A8A52-FDF5-41A9-B55A-005C82185884}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoApp.Web", "src\DemoApp.Web\DemoApp.Web.csproj", "{B9F60FAA-E0F9-4B93-A333-1CE8582B6588}"
 EndProject

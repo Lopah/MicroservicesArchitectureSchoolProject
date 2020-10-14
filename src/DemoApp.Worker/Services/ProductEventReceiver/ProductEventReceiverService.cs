@@ -37,7 +37,7 @@ namespace DemoApp.Worker.Services.ProductEventReceiver
 
         private Task Handle(ProductEvent evt)
         {
-            // repo/service call to save data.
+            // service call to save data.
 
             return Task.CompletedTask;
         }

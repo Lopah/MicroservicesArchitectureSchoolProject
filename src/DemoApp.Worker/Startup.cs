@@ -10,7 +10,7 @@ namespace DemoApp.Worker
         {
             var configuration = hostContext.Configuration;
 
-            // register event bus
+            // register event bus -- singleton
 
             // register core functionality
         }

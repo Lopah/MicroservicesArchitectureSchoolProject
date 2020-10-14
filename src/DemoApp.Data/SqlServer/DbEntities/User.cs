@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace DemoApp.Infrastructure.SqlServer.DbEntities
 {
-    public class Account
+    public class User
     {
-        public Account()
+        public User()
         {
             Orders = new List<Order>( );
         }

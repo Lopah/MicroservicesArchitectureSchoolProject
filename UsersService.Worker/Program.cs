@@ -1,9 +1,9 @@
 ﻿using DemoApp.Shared.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace DemoApp.Worker
+namespace UsersService.Worker
 {
-    public class Program
+    class Program
     {
         public static void Main(string[ ] args)
         {

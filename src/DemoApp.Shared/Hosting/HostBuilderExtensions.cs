@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
 
-namespace DemoApp.Core.Hosting
+namespace DemoApp.Shared.Hosting
 {
     public static class HostBuilderExtensions
     {

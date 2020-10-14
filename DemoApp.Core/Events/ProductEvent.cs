@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DemoApp.Worker.Services.ProductEventReceiver.EventDefinition
+namespace DemoApp.Core.Events
 {
     public class ProductEvent
     {

@@ -2,18 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DemoApp.Data;
 using DemoApp.Web.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DemoApp.Web.Controllers
 {
-    public class AccountController : Controller
+    public class UserController : Controller
     {
+        private readonly ApplicationDbContext _dbContext;
+
+        public UserController(ApplicationDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
         // GET: Account
         public ActionResult Index()
         {
-            return View(new List<Account>());
+            return View(new List<UserViewModel>());
         }
 
         // GET: Account/Details/5
@@ -25,16 +33,17 @@ namespace DemoApp.Web.Controllers
         // GET: Account/Create
         public ActionResult Create()
         {
-            return View();
+            return View( new UserViewModel());
         }
 
         // POST: Account/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(UserViewModel model)
         {
             try
             {
+
                 // TODO: Add insert logic here
 
                 return RedirectToAction(nameof(Index));

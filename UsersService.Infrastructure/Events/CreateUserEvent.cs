@@ -1,4 +1,4 @@
-namespace UsersService.Worker.Services.CreateUserReceiver
+namespace UsersService.Worker.Events
 {
     public class CreateUserEvent
     {

@@ -1,4 +1,4 @@
-﻿namespace DemoApp.Core.Config.Rabbit.Options
+﻿namespace DemoApp.Infrastructure.Config.Rabbit.Options
 {
     public class RabbitOptions
     {

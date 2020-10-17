@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using DemoApp.Core.Events;
+using DemoApp.Infrastructure.Events;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 

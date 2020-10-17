@@ -4,36 +4,34 @@ using System.Linq;
 using System.Threading.Tasks;
 using DemoApp.Data;
 using DemoApp.Web.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DemoApp.Web.Controllers
 {
-    public class UserController : Controller
+    public class ProductController : Controller
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly ApplicationDbContext applicationDbContext;
 
-        public UserController(ApplicationDbContext dbContext)
+        public ProductController(ApplicationDbContext applicationDbContext)
         {
-            _dbContext = dbContext;
+            this.applicationDbContext = applicationDbContext;
         }
 
-        // GET: Account
-        public ActionResult Index()
+        public IActionResult Index()
         {
-            return View(new List<UserViewModel>());
+            return View(new List<ProductViewModel>());
         }
 
-        // GET: Account/Create
+        // GET: Product/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Account/Create
+        // POST: Product/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(UserViewModel model)
+        public ActionResult Create(ProductViewModel model)
         {
             try
             {

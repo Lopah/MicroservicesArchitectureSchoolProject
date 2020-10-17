@@ -2,26 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DemoApp.Data;
 using DemoApp.Web.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DemoApp.Web.Controllers
 {
-    public class UserController : Controller
+    public class OrderController : Controller
     {
-        private readonly ApplicationDbContext _dbContext;
-
-        public UserController(ApplicationDbContext dbContext)
+        public IActionResult Index()
         {
-            _dbContext = dbContext;
-        }
-
-        // GET: Account
-        public ActionResult Index()
-        {
-            return View(new List<UserViewModel>());
+            return View(new List<OrderViewModel>());
         }
 
         // GET: Account/Create
@@ -33,7 +23,7 @@ namespace DemoApp.Web.Controllers
         // POST: Account/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(UserViewModel model)
+        public ActionResult Create(OrderViewModel model)
         {
             try
             {

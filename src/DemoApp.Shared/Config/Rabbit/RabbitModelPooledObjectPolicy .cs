@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DemoApp.Core.Config.Rabbit.Options;
+using DemoApp.Infrastructure.Config.Rabbit.Options;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.ObjectPool;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 
-namespace DemoApp.Core.Config.Rabbit
+namespace DemoApp.Infrastructure.Config.Rabbit
 {
     public class RabbitModelPooledObjectPolicy : IPooledObjectPolicy<Model>
     {

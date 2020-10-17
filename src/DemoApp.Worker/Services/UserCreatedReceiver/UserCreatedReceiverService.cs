@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using DemoApp.Data;
 using DemoApp.Infrastructure.SqlServer.DbEntities;
 using Microsoft.Extensions.Hosting;
-using DemoApp.Core.Events;
+using DemoApp.Infrastructure.Events;
 
 namespace DemoApp.Worker.Services.UserCreatedReceiver
 {

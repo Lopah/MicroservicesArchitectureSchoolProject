@@ -1,10 +1,7 @@
-using System;
-
-namespace UsersService.Worker.Services.UserCreatedPublisher
+namespace DemoApp.Infrastructure.Events
 {
-    public class UserCreatedEvent
+    public class CreateUserEvent
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }

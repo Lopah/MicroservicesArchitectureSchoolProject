@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using DemoApp.Data;
 using DemoApp.Infrastructure.SqlServer.DbEntities;
 using Microsoft.Extensions.Hosting;
+using DemoApp.Core.Events;
 
 namespace DemoApp.Worker.Services.UserCreatedReceiver
 {
@@ -17,11 +18,13 @@ namespace DemoApp.Worker.Services.UserCreatedReceiver
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
+            return Task.CompletedTask;
             //Subscribe UserCreated topic -> Assign handle method
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
+            return Task.CompletedTask;
             //Unsubscribe
         }
 

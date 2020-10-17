@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using DemoApp.Worker.Services.ProductEventReceiver.EventDefinition;
+using DemoApp.Core.Events;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 

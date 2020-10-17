@@ -1,6 +1,8 @@
+using DemoApp.Shared.Config;
 using DemoApp.Shared.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using UsersService.Infrastructure.Data;
 
 namespace UsersService.Worker
 {
@@ -10,9 +12,7 @@ namespace UsersService.Worker
         {
             var configuration = hostContext.Configuration;
 
-            // register event bus -- singleton
-
-            // register core functionality
+            services.ConfigureDatabase<ApplicationDbContext>("Users");
         }
     }
 }

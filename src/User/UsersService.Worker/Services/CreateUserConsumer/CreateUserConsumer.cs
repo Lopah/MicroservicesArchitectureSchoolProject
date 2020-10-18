@@ -3,9 +3,9 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using DemoApp.Shared.Events;
+using DemoApp.Shared.Events.Users;
 using UsersService.Infrastructure.Data;
 using UsersService.Infrastructure.Data.Entites;
-using UsersService.Infrastructure.Events;
 
 namespace UsersService.Worker.Services.CreateUserConsumer
 {

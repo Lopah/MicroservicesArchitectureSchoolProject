@@ -1,11 +1,11 @@
 ﻿using DemoApp.Infrastructure;
-using DemoApp.Infrastructure.Events;
 using DemoApp.Infrastructure.SqlServer.DbEntities;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Threading.Tasks;
+using DemoApp.Shared.Events.Orders;
 
 namespace DemoApp.Worker.Services.OrderCreatedReceiver
 {

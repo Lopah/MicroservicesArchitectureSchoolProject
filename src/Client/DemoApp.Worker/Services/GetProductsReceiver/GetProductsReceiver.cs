@@ -1,5 +1,4 @@
 ﻿using DemoApp.Infrastructure;
-using DemoApp.Infrastructure.Events;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
@@ -11,6 +10,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using DemoApp.Infrastructure.SqlServer.DbEntities;
+using DemoApp.Shared.Events.Products;
 
 namespace DemoApp.Worker.Services.GetProductsReceiver
 {

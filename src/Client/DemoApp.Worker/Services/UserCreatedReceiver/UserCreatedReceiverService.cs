@@ -1,5 +1,4 @@
 using DemoApp.Infrastructure;
-using DemoApp.Infrastructure.Events;
 using DemoApp.Infrastructure.SqlServer.DbEntities;
 using MassTransit;
 using Microsoft.Extensions.Logging;

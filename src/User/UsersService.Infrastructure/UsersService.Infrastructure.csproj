@@ -8,4 +8,8 @@
       <ProjectReference Include="..\..\Client\DemoApp.Infrastructure\DemoApp.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Events" />
+    </ItemGroup>
+
 </Project>

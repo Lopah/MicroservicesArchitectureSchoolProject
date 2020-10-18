@@ -1,4 +1,4 @@
-namespace DemoApp.Shared.Events
+namespace DemoApp.Shared.Events.Users
 {
     public class CreateUserEvent
     {

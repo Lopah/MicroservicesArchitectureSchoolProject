@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DemoApp.Infrastructure;
-using DemoApp.Infrastructure.Events;
 using DemoApp.Shared.Config;
 using DemoApp.Shared.Events;
+using DemoApp.Shared.Events.Users;
 using DemoApp.Web.Models;
 using MassTransit;
 using Microsoft.AspNetCore.Http;
@@ -18,13 +18,13 @@ namespace DemoApp.Web.Controllers
     public class UserController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly ISendEndpointProvider _endpointProvider;
+        private readonly IPublishEndpoint _publishEndpoint;
         private readonly RabbitMqSettings _settings;
 
-        public UserController(ApplicationDbContext dbContext, IOptions<RabbitMqSettings> settings, ISendEndpointProvider endpointProvider)
+        public UserController(ApplicationDbContext dbContext, IOptions<RabbitMqSettings> settings, IPublishEndpoint publishEndpoint)
         {
             _dbContext = dbContext;
-            _endpointProvider = endpointProvider;
+            _publishEndpoint = publishEndpoint;
             _settings = settings?.Value;
         }
 
@@ -65,7 +65,7 @@ namespace DemoApp.Web.Controllers
 
                 try
                 {
-                    await SendMessage(userEvent);
+                    await _publishEndpoint.Publish<CreateUserEvent>(userEvent);
                 }
                 catch
                 {
@@ -75,13 +75,6 @@ namespace DemoApp.Web.Controllers
             }
 
             return View(model);
-        }
-
-        public async Task SendMessage<T>(T message)
-        {
-            var endpoint = $"rabbitmq://{_settings.Hostname}:{_settings.Port}/{_settings.Endpoint}?durable=false";
-            var finalEndpoint = await _endpointProvider.GetSendEndpoint(new Uri(endpoint));
-            await finalEndpoint.Send(message);
         }
     }
 }

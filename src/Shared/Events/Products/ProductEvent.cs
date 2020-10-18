@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DemoApp.Infrastructure.Events
+namespace DemoApp.Shared.Events.Products
 {
     public class ProductEvent
     {

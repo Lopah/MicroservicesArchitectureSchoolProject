@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DemoApp.Shared.Config;
 using DemoApp.Shared.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using UsersService.Infrastructure.Data;
@@ -17,11 +19,11 @@ namespace UsersService.Worker
 
             services.ConfigureDatabase<ApplicationDbContext>("Users");
 
-            var rabbitConfig = configuration.GetSection("Rabbitmq");
+            var rabbitOptions = new RabbitMqSettings();
+            configuration.GetSection("RabbitOptions").Bind(rabbitOptions);
 
             var consumers = new List<Type> {typeof(CreateUserConsumer)};
-
-            services.ConfigureRabbitMq(rabbitConfig, consumers);
+            services.ConfigureRabbitMq(rabbitOptions, consumers);
         }
     }
 }

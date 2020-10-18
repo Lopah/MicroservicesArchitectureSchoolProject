@@ -16,31 +16,24 @@ namespace DemoApp.Shared.Config
                 options.UseInMemoryDatabase(databaseName));
         }
 
-        public static void ConfigureRabbitMq(this IServiceCollection services, IConfigurationSection configuration, IEnumerable<Type> consumers)
+        public static void ConfigureRabbitMq(this IServiceCollection services, RabbitMqSettings settings, IEnumerable<Type> consumers)
         {
             services.AddMassTransit(options =>
             {
-                var configSections = configuration.GetSection("Rabbitmq");
-                var host = configSections["Host"];
-                var userName = configSections["UserName"];
-                var password = configSections["Password"];
-                var virtualHost = configSections["VirtualHost"];
-                var port = Convert.ToUInt16(configSections["Port"]);
-
                 options.AddBus(busContext =>
                 {
                     var bus = Bus.Factory.CreateUsingRabbitMq(cfg =>
                     {
-                        cfg.Host(host, port, virtualHost, hostOptions =>
+                        cfg.Host(settings.Hostname, settings.Port, settings.VirtualHost, hostOptions =>
                         {
-                            hostOptions.Username(userName);
-                            hostOptions.Password(password);
+                            hostOptions.Username(settings.Username);
+                            hostOptions.Password(settings.Password);
                         });
 
-                        cfg.ReceiveEndpoint(configSections["Endpoint"], ep =>
+                        cfg.ReceiveEndpoint(settings.Endpoint, ep =>
                         {
                             //Configure Rabbitmq exchange properties
-                            ep.PrefetchCount = Convert.ToUInt16(configSections["PrefetchCount"]);
+                            ep.PrefetchCount = settings.PrefetchCount;
 
                             foreach (var consumer in consumers)
                             {

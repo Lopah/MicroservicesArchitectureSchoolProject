@@ -10,19 +10,21 @@ namespace ProductsService.Worker.Services.CreateProductConsumer
 {
     public class CreateProductConsumer : IConsumer<CreateProductEvent>
     {
-        private readonly ILogger<CreateProductConsumer> logger;
-        private readonly ApplicationDbContext applicationDbContext;
-        private readonly IPublishEndpoint publishEndpoint;
+        private readonly ILogger<CreateProductConsumer> _logger;
+        private readonly ApplicationDbContext _applicationDbContext;
+        private readonly IPublishEndpoint _publishEndpoint;
 
         public CreateProductConsumer(ILogger<CreateProductConsumer> logger, ApplicationDbContext applicationDbContext, IPublishEndpoint publishEndpoint)
         {
-            this.logger = logger;
-            this.applicationDbContext = applicationDbContext;
-            this.publishEndpoint = publishEndpoint;
+            _logger = logger;
+            _applicationDbContext = applicationDbContext;
+            _publishEndpoint = publishEndpoint;
         }
 
         public async Task Consume(ConsumeContext<CreateProductEvent> context)
         {
+            _logger.LogInformation($"Processing msg: '{context.MessageId}' with topic: '{context.ConversationId}'.");
+
             try
             {
                 var product = context.Message;
@@ -35,12 +37,12 @@ namespace ProductsService.Worker.Services.CreateProductConsumer
                     Price = product.Price
                 };
 
-                applicationDbContext.Products.Add(dbProduct);
-                await applicationDbContext.SaveChangesAsync();
+                _applicationDbContext.Products.Add(dbProduct);
+                await _applicationDbContext.SaveChangesAsync();
 
-                logger.LogInformation($"Created product with ID {dbProduct.Id} and name {dbProduct.Name}");
+                _logger.LogInformation($"Created product with ID {dbProduct.Id} and name {dbProduct.Name}");
 
-                await publishEndpoint.Publish(new ProductCreatedEvent
+                await _publishEndpoint.Publish(new ProductCreatedEvent
                 {
                     Id = dbProduct.Id,
                     Name = dbProduct.Name,
@@ -50,7 +52,7 @@ namespace ProductsService.Worker.Services.CreateProductConsumer
             }
             catch (Exception ex)
             {
-                logger.LogError(default, ex, ex.Message);
+                _logger.LogError(default, ex, ex.Message);
                 throw;
             }
         }

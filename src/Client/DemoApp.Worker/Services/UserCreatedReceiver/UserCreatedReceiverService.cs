@@ -1,9 +1,8 @@
 using DemoApp.Infrastructure;
 using DemoApp.Infrastructure.SqlServer.DbEntities;
+using DemoApp.Shared.Events.Users;
 using MassTransit;
 using Microsoft.Extensions.Logging;
-using RabbitMQ.Client;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace DemoApp.Worker.Services.UserCreatedReceiver

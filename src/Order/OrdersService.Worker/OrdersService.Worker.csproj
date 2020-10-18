@@ -12,6 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Services\CreateOrderEventConsumer\CreateOrderEventPublisher.cs" />
+    <Compile Include="Services\UserCreatedEventConsumer\UserCreatedEventConsumer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Shared\DemoApp.Shared.csproj" />
     <ProjectReference Include="..\OrdersService.Infrastructure\OrdersService.Infrastructure.csproj" />
   </ItemGroup>

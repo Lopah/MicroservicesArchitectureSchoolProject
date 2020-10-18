@@ -9,8 +9,9 @@ namespace OrdersService.Infrastructure.Data
         {
 
         }
-
-        public DbSet<Order> Users { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderProduct> OrderProducts { get; set; }
+        public DbSet<OrderUser> OrderUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

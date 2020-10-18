@@ -1,38 +1,26 @@
-using DemoApp.Infrastructure;
-using DemoApp.Infrastructure.SqlServer.DbEntities;
 using MassTransit;
 using Microsoft.Extensions.Logging;
-using RabbitMQ.Client;
-using System.Threading;
 using System.Threading.Tasks;
+using DemoApp.Shared.Events.Users;
 
 namespace DemoApp.Worker.Services.UserCreatedReceiver
 {
     public class UserCreatedReceiverService: IConsumer<UserCreatedEvent>
     {
         private readonly ILogger<UserCreatedReceiverService> _logger;
-        private readonly ApplicationDbContext _dbContext;
 
-        public UserCreatedReceiverService(ILogger<UserCreatedReceiverService> logger, ApplicationDbContext dbContext)
+        public UserCreatedReceiverService(ILogger<UserCreatedReceiverService> logger)
         {
             _logger = logger;
-            _dbContext = dbContext;
         }
 
         public async Task Consume(ConsumeContext<UserCreatedEvent> context)
         {
-            var user = new User
-            {
-                Id = context.Message.Id,
-                Name = context.Message.Name,
-                Username = context.Message.Username,
-                Password = context.Message.Password
-            };
+            _logger.LogInformation($"Processing msg: '{context.MessageId}'.");
 
-            await _dbContext.Users.AddAsync(user);
-            await _dbContext.SaveChangesAsync( );
+            //TODO: Signal WEB project
 
-            _logger.LogInformation($"Created user with ID {user.Id} and username {user.Username}");
+            _logger.LogInformation($"Successfully processed msg: '{context.MessageId}'.");
         }
     }
 }

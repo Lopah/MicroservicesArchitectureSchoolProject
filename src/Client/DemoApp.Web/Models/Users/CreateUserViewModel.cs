@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace DemoApp.Web.Models
+﻿namespace DemoApp.Web.Models.Users
 {
     public class CreateUserViewModel
     {

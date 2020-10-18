@@ -10,11 +10,8 @@ namespace DemoApp.Web.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly ApplicationDbContext applicationDbContext;
-
-        public ProductController(ApplicationDbContext applicationDbContext)
+        public ProductController()
         {
-            this.applicationDbContext = applicationDbContext;
         }
 
         public IActionResult Index()

@@ -7,7 +7,5 @@ namespace DemoApp.Shared.Events.Orders
     {
         public Guid OrderId { get; set; }
         public Guid UserId { get; set; }
-
-        public List<Guid> ProductIds { get; set; } = new List<Guid>();
     }
 }

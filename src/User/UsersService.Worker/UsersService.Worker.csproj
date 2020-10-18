@@ -6,6 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Client\DemoApp.Core\DemoApp.Core.csproj" />
       <ProjectReference Include="..\..\Client\DemoApp.Infrastructure\DemoApp.Infrastructure.csproj" />
       <ProjectReference Include="..\..\Shared\DemoApp.Shared.csproj" />
       <ProjectReference Include="..\UsersService.Infrastructure\UsersService.Infrastructure.csproj" />

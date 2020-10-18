@@ -1,9 +1,10 @@
+using System;
+using System.Collections.Generic;
 using DemoApp.Shared.Config;
 using DemoApp.Shared.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using UsersService.Infrastructure.Data;
-using UsersService.Infrastructure.Events;
 using UsersService.Worker.Services.CreateUserConsumer;
 
 namespace UsersService.Worker
@@ -18,7 +19,9 @@ namespace UsersService.Worker
 
             var rabbitConfig = configuration.GetSection("Rabbitmq");
 
-            services.ConfigureRabbitMq<CreateUserConsumer, CreateUserEvent>(rabbitConfig);
+            var consumers = new List<Type> {typeof(CreateUserConsumer)};
+
+            services.ConfigureRabbitMq(rabbitConfig, consumers);
         }
     }
 }

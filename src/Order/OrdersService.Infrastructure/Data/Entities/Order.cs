@@ -7,11 +7,9 @@ namespace OrdersService.Infrastructure.Data.Entities
     {
         public Order()
         {
-            Products = new List<Product>( );
         }
         public Guid Id { get; set; }
         public string Name { get; set; }
         public int TotalPrice { get; set; }
-        public ICollection<Product> Products { get; set; }
     }
 }

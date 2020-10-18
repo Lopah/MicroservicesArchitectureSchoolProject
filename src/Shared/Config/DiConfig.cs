@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace DemoApp.Shared.Config
 {
@@ -14,10 +16,9 @@ namespace DemoApp.Shared.Config
                 options.UseInMemoryDatabase(databaseName));
         }
 
-        public static void ConfigureRabbitMq<TConsumer, TMessage>(this IServiceCollection services, IConfigurationSection configuration) 
-            where TConsumer : class, IConsumer<TMessage> where TMessage : class
+        public static void ConfigureRabbitMq(this IServiceCollection services, IConfigurationSection configuration, IEnumerable<Type> consumers)
         {
-            services.AddMassTransit(x =>
+            services.AddMassTransit(options =>
             {
                 var configSections = configuration.GetSection("Rabbitmq");
                 var host = configSections["Host"];
@@ -26,16 +27,14 @@ namespace DemoApp.Shared.Config
                 var virtualHost = configSections["VirtualHost"];
                 var port = Convert.ToUInt16(configSections["Port"]);
 
-                x.AddConsumer<TConsumer>();
-
-                x.AddBus(provider =>
+                options.AddBus(busContext =>
                 {
                     var bus = Bus.Factory.CreateUsingRabbitMq(cfg =>
                     {
-                        cfg.Host(host, port, virtualHost, host =>
+                        cfg.Host(host, port, virtualHost, hostOptions =>
                         {
-                            host.Username(userName);
-                            host.Password(password);
+                            hostOptions.Username(userName);
+                            hostOptions.Password(password);
                         });
 
                         cfg.ReceiveEndpoint(configSections["Endpoint"], ep =>
@@ -43,16 +42,26 @@ namespace DemoApp.Shared.Config
                             //Configure Rabbitmq exchange properties
                             ep.PrefetchCount = Convert.ToUInt16(configSections["PrefetchCount"]);
 
-                            ep.ConfigureConsumer<TConsumer>(provider);
+                            foreach (var consumer in consumers)
+                            {
+                                ep.ConfigureConsumer(busContext, consumer);
+                            }
                         });
                     });
 
                     bus.Start();
                     
                     return bus;
-
                 });
             });
+
+            services.Configure<HealthCheckPublisherOptions>(options =>
+            {
+                options.Delay = TimeSpan.FromSeconds(2);
+                options.Predicate = (check) => check.Tags.Contains("ready");
+            });
+
+            services.AddMassTransitHostedService();
         }
     }
 }

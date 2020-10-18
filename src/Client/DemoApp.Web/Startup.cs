@@ -1,4 +1,5 @@
 using DemoApp.Infrastructure;
+using DemoApp.Shared.Config;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -21,7 +22,7 @@ namespace DemoApp.Web
         {
             services.AddControllersWithViews( );
 
-            services.ConfigureDatabase(Configuration.GetConnectionString("DefaultConnection"));
+            services.ConfigureDatabase<ApplicationDbContext>(Configuration.GetConnectionString("DefaultConnection"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

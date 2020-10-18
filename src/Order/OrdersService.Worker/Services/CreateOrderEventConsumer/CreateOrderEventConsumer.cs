@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace OrdersService.Worker.Services.CreateOrderEventConsumer
 {
-    public class CreateOrderEventPublisher : IConsumer<CreateOrderEvent>
+    public class CreateOrderEventConsumer : IConsumer<CreateOrderEvent>
     {
-        private readonly ILogger<CreateOrderEventPublisher> _logger;
+        private readonly ILogger<CreateOrderEventConsumer> _logger;
         private readonly ApplicationDbContext _context;
         private readonly IPublishEndpoint _endpoint;
 
-        public CreateOrderEventPublisher(ILogger<CreateOrderEventPublisher> logger, ApplicationDbContext context, IPublishEndpoint endpoint)
+        public CreateOrderEventConsumer(ILogger<CreateOrderEventConsumer> logger, ApplicationDbContext context, IPublishEndpoint endpoint)
         {
             _logger = logger;
             _context = context;
@@ -24,7 +24,7 @@ namespace OrdersService.Worker.Services.CreateOrderEventConsumer
         }
         public async Task Consume(ConsumeContext<CreateOrderEvent> context)
         {
-            _logger.LogInformation($"Processing msg: '{context.MessageId}'.");
+            _logger.LogInformation($"Processing msg: '{context.MessageId}' with topic: '{context.ConversationId}'.");
 
             var order = new Order
             {

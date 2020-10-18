@@ -5,11 +5,11 @@ using DemoApp.Shared.Events.Orders;
 
 namespace DemoApp.Worker.Services.OrderCreatedReceiver
 {
-    public class OrderCreatedReceiver : IConsumer<OrderCreatedEvent>
+    public class OrderCreatedConsumer : IConsumer<OrderCreatedEvent>
     {
-        private readonly ILogger<OrderCreatedReceiver> _logger;
+        private readonly ILogger<OrderCreatedConsumer> _logger;
 
-        public OrderCreatedReceiver(ILogger<OrderCreatedReceiver> logger)
+        public OrderCreatedConsumer(ILogger<OrderCreatedConsumer> logger)
         {
             _logger = logger;
         }

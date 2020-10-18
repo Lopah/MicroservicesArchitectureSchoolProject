@@ -40,7 +40,7 @@ namespace OrdersService.Worker.Services.Orders.DeleteOrderEventConsumer
                 {
                     Amount = e.Amount,
                     Id = e.Id
-                }),
+                }).ToList(),
                 Id = order.Id
             });
         }

@@ -22,7 +22,8 @@ namespace ProductsService.API
         {
             services.AddControllers();
 
-            services.ConfigureDatabase<ApplicationDbContext>("Products");
+            var connectionString = Configuration.GetConnectionString("Postgres");
+            services.ConfigurePostgresDatabase<ApplicationDbContext>(connectionString);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

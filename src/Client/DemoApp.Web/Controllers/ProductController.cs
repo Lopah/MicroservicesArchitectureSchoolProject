@@ -66,19 +66,23 @@ namespace DemoApp.Web.Controllers
             return View(model);
         }
 
-        public ActionResult Edit()
+        public async Task<IActionResult> Edit(Guid id)
         {
-            var model = new EditProductViewModel();
+            var product = await _productService.GetProductAsync(id);
+            if (product is null)
+                return NotFound();
+
+            var model = new EditProductViewModel(product);
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(Guid id, EditProductViewModel model)
+        public async Task<IActionResult> Edit(Guid id, EditProductViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var userEvent = new EditProductEvent()
+                var productEvent = new EditProductEvent()
                 {
                     Id = id,
                     Name = model.Name,
@@ -88,7 +92,7 @@ namespace DemoApp.Web.Controllers
 
                 try
                 {
-                    await _publishEndpoint.Publish<EditProductEvent>(userEvent);
+                    await _publishEndpoint.Publish<EditProductEvent>(productEvent);
                     return RedirectToAction(nameof(Index));
                 }
                 catch
@@ -99,5 +103,24 @@ namespace DemoApp.Web.Controllers
 
             return View(model);
         }
+
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var productEvent = new DeleteProductEvent()
+            {
+                Id = id
+            };
+
+            try
+            {
+                await _publishEndpoint.Publish<DeleteProductEvent>(productEvent);
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
     }
 }

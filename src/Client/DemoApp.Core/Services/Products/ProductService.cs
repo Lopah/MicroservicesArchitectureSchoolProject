@@ -44,5 +44,19 @@ namespace DemoApp.Core.Services.Products
 
             return result.Deserialize<List<ProductDto>>();
         }
+
+        public async Task<ProductDto> GetProductAsync(Guid id)
+        {
+            var client = this.GetClient();
+            var response = await client.GetAsync($"api/products/{id}");
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception("Product service not available.");
+            }
+
+            var result = await response.Content.ReadAsStringAsync();
+
+            return result.Deserialize<ProductDto>();
+        }
     }
 }

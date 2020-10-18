@@ -1,5 +1,7 @@
 using DemoApp.Core.Config;
 using DemoApp.Core.Services;
+using DemoApp.Core.Services.Products;
+using DemoApp.Core.Services.Users;
 using DemoApp.Infrastructure;
 using DemoApp.Shared.Config;
 using Microsoft.AspNetCore.Builder;
@@ -36,6 +38,7 @@ namespace DemoApp.Web
             #region Services
 
             services.AddHttpClient();
+            services.AddScoped<IProductService,ProductService>();
             services.AddScoped<IUserService,UserService>();
 
             #endregion

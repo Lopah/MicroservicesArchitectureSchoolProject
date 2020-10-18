@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using DemoApp.Core.Services;
+using DemoApp.Core.Services.Users;
 using DemoApp.Shared.Events.Users;
 using DemoApp.Web.Models.Users;
 using MassTransit;
@@ -60,9 +61,13 @@ namespace DemoApp.Web.Controllers
             return View(model);
         }
 
-        public ActionResult Edit()
+        public async Task<IActionResult> Edit(Guid id)
         {
-            var model = new EditUserViewModel();
+            var user = await _userService.GetUserAsync(id);
+            if (user is null)
+                return NotFound();
+
+            var model = new EditUserViewModel(user);
             return View(model);
         }
 
@@ -87,11 +92,29 @@ namespace DemoApp.Web.Controllers
                 }
                 catch
                 {
-                    ModelState.AddModelError(string.Empty, "Error - Create User Event Publish" );
+                    ModelState.AddModelError(string.Empty, "Error - Edit User Event Publish" );
                 }
             }
 
             return View(model);
+        }
+
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var userEvent = new DeleteUserEvent()
+            {
+                Id = id
+            };
+
+            try
+            {
+                await _publishEndpoint.Publish<DeleteUserEvent>(userEvent);
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
     }
 }

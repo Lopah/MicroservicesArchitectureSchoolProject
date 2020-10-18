@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text.Json;
 using System.Threading.Tasks;
 using DemoApp.Core.Config;
 using DemoApp.Core.Models.Users;
 using DemoApp.Shared.Extensions;
 using Microsoft.Extensions.Options;
 
-namespace DemoApp.Core.Services
+namespace DemoApp.Core.Services.Users
 {
     public class UserService: IUserService
     {
@@ -42,6 +41,20 @@ namespace DemoApp.Core.Services
             var result = await response.Content.ReadAsStringAsync();
 
             return result.Deserialize<List<UserDto>>();
+        }
+
+        public async Task<UserDto> GetUserAsync(Guid id)
+        {
+            var client = this.GetClient();
+            var response = await client.GetAsync($"api/users/{id}");
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception("User service not available.");
+            }
+
+            var result = await response.Content.ReadAsStringAsync();
+
+            return result.Deserialize<UserDto>();
         }
     }
 }

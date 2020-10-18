@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace DemoApp.Shared.Events.Products
+namespace OrdersService.Infrastructure.Data.Entities
 {
-    public class ProductEvent
+    public class OrderProduct
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

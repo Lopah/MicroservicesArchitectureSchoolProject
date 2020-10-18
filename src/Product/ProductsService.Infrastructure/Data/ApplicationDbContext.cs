@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using OrdersService.Infrastructure.Data.Entities;
+using ProductsService.Infrastructure.Data.Entities;
 
-namespace OrdersService.Infrastructure.Data
+namespace ProductsService.Infrastructure.Data
 {
     public class ApplicationDbContext : DbContext
     {
@@ -9,9 +9,8 @@ namespace OrdersService.Infrastructure.Data
         {
 
         }
-        public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderProduct> OrderProducts { get; set; }
-        public DbSet<OrderUser> OrderUsers { get; set; }
+
+        public DbSet<Product> Products { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

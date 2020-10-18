@@ -1,6 +1,12 @@
-﻿using DemoApp.Shared.Hosting;
+﻿using DemoApp.Shared.Config;
+using DemoApp.Shared.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ProductsService.Infrastructure.Data;
+using ProductsService.Worker.Services.CreateProductConsumer;
+using System;
+using System.Collections.Generic;
 
 namespace ProductsService.Worker
 {
@@ -10,9 +16,13 @@ namespace ProductsService.Worker
         {
             var configuration = hostContext.Configuration;
 
-            // register event bus -- singleton
+            services.ConfigureDatabase<ApplicationDbContext>("Products");
 
-            // register core functionality
+            var rabbitOptions = new RabbitMqSettings();
+            configuration.GetSection("RabbitOptions").Bind(rabbitOptions);
+
+            var consumers = new List<Type> { typeof(CreateProductConsumer) };
+            services.ConfigureRabbitMq(rabbitOptions, consumers);
         }
     }
 }

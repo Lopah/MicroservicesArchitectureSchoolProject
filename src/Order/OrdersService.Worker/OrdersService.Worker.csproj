@@ -12,9 +12,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Services\CreateOrderEventConsumer\CreateOrderEventConsumer.cs" />
-    <Compile Include="Services\ProductCreatedEventConsumer\ProductCreatedEventConsumer.cs" />
-    <Compile Include="Services\UserCreatedEventConsumer\UserCreatedEventConsumer.cs" />
+    <Compile Include="Services\Orders\CreateOrderEventConsumer\CreateOrderEventConsumer.cs" />
+    <Compile Include="Services\Orders\DeleteOrderEventConsumer\DeleteOrderEventConsumer.cs" />
+    <Compile Include="Services\Products\ProductCreatedEventConsumer\ProductCreatedEventConsumer.cs" />
+    <Compile Include="Services\Products\ProductDeletedEventConsumer\ProductDeletedEventConsumer.cs" />
+    <Compile Include="Services\Products\ProductEditedEventConsumer\ProductEditedEventConsumer.cs" />
+    <Compile Include="Services\Users\UserCreatedEventConsumer\UserCreatedEventConsumer.cs" />
+    <Compile Include="Services\Users\UserDeletedEventConsumer\UserDeletedEventConsumer.cs" />
+    <Compile Include="Services\Users\UserEditedEventConsumer\UserEditedEventConsumer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -5,7 +5,7 @@ using OrdersService.Infrastructure.Data;
 using OrdersService.Infrastructure.Data.Entities;
 using System.Threading.Tasks;
 
-namespace OrdersService.Worker.Services.UserCreatedEventConsumer
+namespace OrdersService.Worker.Services.Users.UserCreatedEventConsumer
 {
     public class UserCreatedEventConsumer : IConsumer<UserCreatedEvent>
     {

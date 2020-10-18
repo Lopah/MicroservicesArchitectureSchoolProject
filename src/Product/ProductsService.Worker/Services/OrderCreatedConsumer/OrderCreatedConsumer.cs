@@ -27,10 +27,13 @@ namespace ProductsService.Worker.Services.OrderCreatedConsumer
             try
             {
                 var order = context.Message;
-                var productIds = order.Products.Select(x => x.Id).ToArray();
+                var productIds = order.Products.Select(x => x.Id);
 
                 var products = await _applicationDbContext.Products.Where(x => productIds.Contains(x.Id)).ToListAsync();
-                products.ForEach(x => x.Amount--);
+                products.ForEach(x =>
+                {
+                    x.Amount -= order.Products.First(y => y.Id == x.Id).Amount;
+                });
 
                 await _applicationDbContext.SaveChangesAsync();
             }

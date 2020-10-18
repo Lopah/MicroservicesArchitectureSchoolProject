@@ -1,15 +1,15 @@
-using MassTransit;
-using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using DemoApp.Shared.Events.Users;
+using MassTransit;
+using Microsoft.Extensions.Logging;
 
-namespace DemoApp.Worker.Services.UserCreatedReceiver
+namespace DemoApp.Worker.Services.UserCreatedConsumer
 {
-    public class UserCreatedReceiverService: IConsumer<UserCreatedEvent>
+    public class UserCreatedConsumer: IConsumer<UserCreatedEvent>
     {
-        private readonly ILogger<UserCreatedReceiverService> _logger;
+        private readonly ILogger<UserCreatedConsumer> _logger;
 
-        public UserCreatedReceiverService(ILogger<UserCreatedReceiverService> logger)
+        public UserCreatedConsumer(ILogger<UserCreatedConsumer> logger)
         {
             _logger = logger;
         }

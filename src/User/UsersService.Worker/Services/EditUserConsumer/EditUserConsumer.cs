@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using DemoApp.Core.Events;
 using DemoApp.Shared.Events.Users;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;

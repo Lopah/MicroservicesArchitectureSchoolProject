@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
-using DemoApp.Core.Events;
 using DemoApp.Core.Services;
-using DemoApp.Web.Models;
+using DemoApp.Shared.Events.Users;
 using DemoApp.Web.Models.Users;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;

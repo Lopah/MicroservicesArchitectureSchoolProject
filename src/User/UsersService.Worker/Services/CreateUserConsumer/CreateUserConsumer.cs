@@ -16,9 +16,9 @@ namespace UsersService.Worker.Services.CreateUserConsumer
 
         public CreateUserConsumer(ILogger<CreateUserConsumer> logger, ApplicationDbContext dbContext, IPublishEndpoint publishEndpoint)
         {
-            this._logger = logger;
-            this._dbContext = dbContext;
-            this._publishEndpoint = publishEndpoint;
+            _logger = logger;
+            _dbContext = dbContext;
+            _publishEndpoint = publishEndpoint;
         }
 
         public async Task Consume(ConsumeContext<CreateUserEvent> context)

@@ -20,7 +20,8 @@ namespace UsersService.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<List<User>>> GetAll()
         {
-            return await _dbContext.Users.AsNoTracking().ToListAsync();
+            var users = await _dbContext.Users.AsNoTracking().ToListAsync();
+            return users;
         }
     }
 }

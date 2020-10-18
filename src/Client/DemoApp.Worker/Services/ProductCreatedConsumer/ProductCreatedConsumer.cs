@@ -7,18 +7,18 @@ namespace DemoApp.Worker.Services.ProductCreatedConsumer
 {
     public class ProductCreatedConsumer : IConsumer<ProductCreatedEvent>
     {
-        private readonly ILogger<ProductCreatedConsumer> logger;
+        private readonly ILogger<ProductCreatedConsumer> _logger;
 
         public ProductCreatedConsumer(ILogger<ProductCreatedConsumer> logger)
         {
-            this.logger = logger;
+            this._logger = logger;
         }
 
         public Task Consume(ConsumeContext<ProductCreatedEvent> context)
         {
             var product = context.Message;
 
-            logger.LogInformation($"Received ProductCreatedEvent => ID: {product.Id}, Name: {product.Name}, Price: {product.Price}, Amount: {product.Amount}");
+            _logger.LogInformation($"Received ProductCreatedEvent => ID: {product.Id}, Name: {product.Name}, Price: {product.Price}, Amount: {product.Amount}");
 
             return Task.CompletedTask;
         }

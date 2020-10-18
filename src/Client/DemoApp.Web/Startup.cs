@@ -1,5 +1,6 @@
 using DemoApp.Core.Config;
 using DemoApp.Core.Services;
+using DemoApp.Core.Services.Orders;
 using DemoApp.Core.Services.Products;
 using DemoApp.Core.Services.Users;
 using DemoApp.Infrastructure;
@@ -38,6 +39,7 @@ namespace DemoApp.Web
             #region Services
 
             services.AddHttpClient();
+            services.AddScoped<IOrderService,OrderService>();
             services.AddScoped<IProductService,ProductService>();
             services.AddScoped<IUserService,UserService>();
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,13 @@ namespace UsersService.Api.Controllers
         {
             var users = await _dbContext.Users.AsNoTracking().ToListAsync();
             return users;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<User>> GetOne(Guid id)
+        {
+            var user = await _dbContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
+            return user;
         }
     }
 }

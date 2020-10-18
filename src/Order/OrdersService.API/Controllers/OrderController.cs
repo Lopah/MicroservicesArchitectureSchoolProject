@@ -3,8 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using OrdersService.Infrastructure.Data;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using OrdersService.Infrastructure.Data.Entities;
 
 namespace OrdersService.API.Controllers
 {
@@ -21,7 +23,8 @@ namespace OrdersService.API.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> GetOrders()
+        [HttpGet]
+        public async Task<ActionResult<List<Order>>> GetOrders()
         {
             var orders = await _context.Orders
                 .Include(e => e.OrderUser)
@@ -31,12 +34,25 @@ namespace OrdersService.API.Controllers
             return Ok(orders);
         }
 
-        public async Task<IActionResult> GetOrderForUser(Guid userId)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<List<Order>>> GetOrder(Guid id)
+        {
+            var order = await _context.Orders
+                .Include(e => e.OrderUser)
+                .Include(e => e.OrderProducts)
+                .FirstOrDefaultAsync(e => e.Id == id);
+
+            return Ok(order);
+        }
+
+
+        [HttpGet("/user/{id}")]
+        public async Task<ActionResult<List<Order>>> GetOrdersForUser(Guid id)
         {
             var orders = await _context.Orders
                 .Include(e => e.OrderUser)
                 .Include(e => e.OrderProducts)
-                .Where(e => e.OrderUser.Id == userId)
+                .Where(e => e.OrderUser.Id == id)
                 .ToListAsync( );
 
             return Ok(orders);

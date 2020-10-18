@@ -87,7 +87,7 @@ namespace DemoApp.Web.Controllers
 
                 try
                 {
-                    await _publishEndpoint.Publish<EditUserViewModel>(userEvent);
+                    await _publishEndpoint.Publish<EditUserEvent>(userEvent);
                     return RedirectToAction(nameof(Index));
                 }
                 catch

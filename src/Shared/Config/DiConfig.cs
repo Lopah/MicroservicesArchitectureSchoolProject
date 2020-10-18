@@ -16,8 +16,11 @@ namespace DemoApp.Shared.Config
                 options.UseInMemoryDatabase(databaseName));
         }
 
-        public static void ConfigureRabbitMq(this IServiceCollection services, RabbitMqSettings settings, List<Type> consumers)
+        public static void ConfigureRabbitMq(this IServiceCollection services, RabbitMqSettings settings, List<Type> consumers = null)
         {
+            if(consumers is null)
+                consumers = new List<Type>();
+
             services.AddMassTransit(options =>
             {
                 foreach (var consumer in consumers)

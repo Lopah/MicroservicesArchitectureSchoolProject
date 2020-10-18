@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using DemoApp.Infrastructure.Events;
+using DemoApp.Shared.Events;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 

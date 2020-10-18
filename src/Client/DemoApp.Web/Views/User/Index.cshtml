@@ -1,4 +1,4 @@
-﻿@model IEnumerable<DemoApp.Web.Models.UserViewModel>
+﻿@model UsersViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -13,33 +13,27 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Username)
+                ID
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Password)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
+                Name
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var user in Model.Users) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Username)
+                @user.Id
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Password)
+                @user.Name
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Edit", "Edit", new { id = user.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = user.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = user.Id })
             </td>
         </tr>
 }

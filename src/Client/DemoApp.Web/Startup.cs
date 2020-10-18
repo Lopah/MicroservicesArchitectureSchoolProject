@@ -22,6 +22,13 @@ namespace DemoApp.Web
         {
             services.AddControllersWithViews( );
             services.ConfigureDatabase<ApplicationDbContext>("Web");
+
+            var rabbitOptions = new RabbitMqSettings();
+            var section = Configuration.GetSection("RabbitOptions");
+            section.Bind(rabbitOptions);
+            services.Configure<RabbitMqSettings>(section);
+
+            services.ConfigureRabbitMq(rabbitOptions);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

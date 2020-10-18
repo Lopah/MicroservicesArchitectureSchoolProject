@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
+using DemoApp.Shared.Events;
 using UsersService.Infrastructure.Data;
 using UsersService.Infrastructure.Data.Entites;
 using UsersService.Infrastructure.Events;

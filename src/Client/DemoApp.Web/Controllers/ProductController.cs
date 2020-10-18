@@ -28,7 +28,7 @@ namespace DemoApp.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var products = new List<ProductDto>(); //await _productService.GetAllUsersAsync();
+            var products = await _productService.GetAllProductsAsync();
             var model = new ProductsViewModel(products);
             return View(model);
         }
@@ -55,12 +55,12 @@ namespace DemoApp.Web.Controllers
                 try
                 {
                     await _publishEndpoint.Publish<CreateProductEvent>(productEvent);
+                    return RedirectToAction(nameof(Index));
                 }
                 catch
                 {
                     ModelState.AddModelError(string.Empty, "Error - Create Product Event Publish" );
                 }
-                return RedirectToAction(nameof(Index));
             }
 
             return View(model);
@@ -74,27 +74,27 @@ namespace DemoApp.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(string id, EditProductViewModel model)
+        public async Task<ActionResult> Edit(Guid id, EditProductViewModel model)
         {
             if (ModelState.IsValid)
             {
-                // var userEvent = new Edit()
-                // {
-                //     Id = model.Id,
-                //     Name = model.Name,
-                //     Username = model.Username,
-                //     Password = model.Password
-                // };
-                //
-                // try
-                // {
-                //     await _publishEndpoint.Publish<EditUserViewModel>(userEvent);
-                // }
-                // catch
-                // {
-                //     ModelState.AddModelError(string.Empty, "Error - Create User Event Publish" );
-                // }
-                return RedirectToAction(nameof(Index));
+                var userEvent = new EditProductEvent()
+                {
+                    Id = id,
+                    Name = model.Name,
+                    Amount = model.Amount,
+                    Price = model.Price
+                };
+
+                try
+                {
+                    await _publishEndpoint.Publish<EditProductEvent>(userEvent);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch
+                {
+                    ModelState.AddModelError(string.Empty, "Error - Update User Event Publish" );
+                }
             }
 
             return View(model);

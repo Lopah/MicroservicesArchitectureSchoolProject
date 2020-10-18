@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DemoApp.Core.Config;
 using DemoApp.Core.Models.Products;
 using DemoApp.Core.Models.Users;
+using DemoApp.Shared.Extensions;
 using Microsoft.Extensions.Options;
 
 namespace DemoApp.Core.Services.Products
@@ -41,7 +42,7 @@ namespace DemoApp.Core.Services.Products
 
             var result = await response.Content.ReadAsStringAsync();
 
-            return JsonSerializer.Deserialize<List<ProductDto>>(result);
+            return result.Deserialize<List<ProductDto>>();
         }
     }
 }

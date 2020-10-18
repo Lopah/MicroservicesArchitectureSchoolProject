@@ -49,12 +49,12 @@ namespace DemoApp.Web.Controllers
                 try
                 {
                     await _publishEndpoint.Publish<CreateUserEvent>(userEvent);
+                    return RedirectToAction(nameof(Index));
                 }
                 catch
                 {
                     ModelState.AddModelError(string.Empty, "Error - Create User Event Publish" );
                 }
-                return RedirectToAction(nameof(Index));
             }
 
             return View(model);
@@ -83,12 +83,12 @@ namespace DemoApp.Web.Controllers
                 try
                 {
                     await _publishEndpoint.Publish<EditUserViewModel>(userEvent);
+                    return RedirectToAction(nameof(Index));
                 }
                 catch
                 {
                     ModelState.AddModelError(string.Empty, "Error - Create User Event Publish" );
                 }
-                return RedirectToAction(nameof(Index));
             }
 
             return View(model);

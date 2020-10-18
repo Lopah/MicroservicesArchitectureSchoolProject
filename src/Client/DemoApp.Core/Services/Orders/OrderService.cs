@@ -11,7 +11,7 @@ namespace DemoApp.Core.Services.Orders
 {
     public class OrderService : IOrderService
     {
-        private const string HttpClientName = "UserServiceHttpClient";
+        private const string HttpClientName = "OrderServiceHttpClient";
         private readonly IHttpClientFactory _clientFactory;
         private readonly AppSettings _appSettings;
 
@@ -27,7 +27,7 @@ namespace DemoApp.Core.Services.Orders
             var response = await client.GetAsync("api/orders");
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception("User service not available.");
+                throw new Exception("Order service not available.");
             }
 
             var result = await response.Content.ReadAsStringAsync();
@@ -38,7 +38,7 @@ namespace DemoApp.Core.Services.Orders
         private HttpClient GetClient()
         {
             var client = _clientFactory.CreateClient(HttpClientName);
-            client.BaseAddress = new Uri(_appSettings.Services.UserServiceUrl);
+            client.BaseAddress = new Uri(_appSettings.Services.OrderServiceUrl);
 
             return client;
         }

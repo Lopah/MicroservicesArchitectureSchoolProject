@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using DemoApp.Core.Config;
 using DemoApp.Core.Models.Users;
+using DemoApp.Shared.Extensions;
 using Microsoft.Extensions.Options;
 
 namespace DemoApp.Core.Services
@@ -40,7 +41,7 @@ namespace DemoApp.Core.Services
 
             var result = await response.Content.ReadAsStringAsync();
 
-            return JsonSerializer.Deserialize<List<UserDto>>(result);
+            return result.Deserialize<List<UserDto>>();
         }
     }
 }

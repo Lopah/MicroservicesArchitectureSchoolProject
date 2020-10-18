@@ -9,6 +9,22 @@ namespace DemoApp.Shared.Config
 {
     public static class DiConfig
     {
+        public static void ConfigurePostgresDatabase<T>(this IServiceCollection services, string connectionString) where T : DbContext
+        {
+            services.AddDbContext<T>(options =>
+                options.UseNpgsql(connectionString));
+
+            services.EnsureDatabaseIsCreated<T>();
+        }
+
+        public static void EnsureDatabaseIsCreated<T>(this IServiceCollection services) where T : DbContext
+        {
+            var serviceProvider = services.BuildServiceProvider();
+
+            var dbContext = serviceProvider.GetService<T>();
+            dbContext?.Database.EnsureCreated();
+        }
+
         public static void ConfigureDatabase<T>(this IServiceCollection services, string databaseName) where T : DbContext
         {
             services.AddDbContext<T>(options =>

@@ -20,8 +20,9 @@ namespace UsersService.Worker
         {
             Configuration = hostContext.Configuration;
 
-            services.ConfigureDatabase<ApplicationDbContext>("Users");
-            
+            var connectionString = Configuration.GetConnectionString("Postgres");
+            services.ConfigurePostgresDatabase<ApplicationDbContext>(connectionString);
+
             var rabbitOptions = new RabbitMqSettings();
             Configuration.GetSection("RabbitOptions").Bind(rabbitOptions);
 

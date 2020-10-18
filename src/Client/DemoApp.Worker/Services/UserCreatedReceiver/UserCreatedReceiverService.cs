@@ -1,52 +1,39 @@
+using DemoApp.Infrastructure;
+using DemoApp.Infrastructure.Events;
+using DemoApp.Infrastructure.SqlServer.DbEntities;
+using MassTransit;
+using Microsoft.Extensions.Logging;
+using RabbitMQ.Client;
 using System.Threading;
 using System.Threading.Tasks;
-using DemoApp.Infrastructure;
-using DemoApp.Infrastructure.SqlServer.DbEntities;
-using Microsoft.Extensions.Hosting;
-using DemoApp.Infrastructure.Events;
-using RabbitMQ.Client;
 
 namespace DemoApp.Worker.Services.UserCreatedReceiver
 {
-    public class UserCreatedReceiverService: IHostedService
+    public class UserCreatedReceiverService: IConsumer<UserCreatedEvent>
     {
-        private const string TopicName = "UserCreated";
+        private readonly ILogger<UserCreatedReceiverService> _logger;
         private readonly ApplicationDbContext _dbContext;
-        private IConnection connection;
-        private IModel model;
 
-        public UserCreatedReceiverService(ApplicationDbContext dbContext)
+        public UserCreatedReceiverService(ILogger<UserCreatedReceiverService> logger, ApplicationDbContext dbContext)
         {
+            _logger = logger;
             _dbContext = dbContext;
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask;
-            //Subscribe UserCreated topic -> Assign handle method
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            _logger.LogInformation($"Stopping {nameof(UserCreatedReceiverService)}");
-
-            _connection.Close( );
-
-            return Task.CompletedTask;
-        }
-
-        private async Task Handle(UserCreatedEvent evt)
+        public async Task Consume(ConsumeContext<UserCreatedEvent> context)
         {
             var user = new User
             {
-                Id = evt.Id,
-                Name = evt.Name,
-                Username = evt.Username,
-                Password = evt.Password
+                Id = context.Message.Id,
+                Name = context.Message.Name,
+                Username = context.Message.Username,
+                Password = context.Message.Password
             };
 
             await _dbContext.Users.AddAsync(user);
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync( );
+
+            _logger.LogInformation($"Created user with ID {user.Id} and username {user.Username}");
         }
     }
 }

@@ -13,14 +13,14 @@ namespace DemoApp.Worker.Services.GetProductsPublisher
     {
         private const string TopicName = "GetProducts";
         private readonly ILogger<GetProductsPublisher> _logger;
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _dbContext;
         private IConnection _connection;
         private IModel _model;
 
-        public GetProductsPublisher(ILogger<GetProductsPublisher> logger, ApplicationDbContext context)
+        public GetProductsPublisher(ILogger<GetProductsPublisher> logger, ApplicationDbContext dbContext)
         {
             _logger = logger;
-            _context = context;
+            _dbContext = dbContext;
         }
         public Task StartAsync(CancellationToken cancellationToken)
         {

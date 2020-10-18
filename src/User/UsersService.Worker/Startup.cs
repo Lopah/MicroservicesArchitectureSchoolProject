@@ -23,7 +23,7 @@ namespace UsersService.Worker
             services.ConfigureDatabase<ApplicationDbContext>("Users");
             
             var rabbitOptions = new RabbitMqSettings();
-            configuration.GetSection("RabbitOptions").Bind(rabbitOptions);
+            Configuration.GetSection("RabbitOptions").Bind(rabbitOptions);
 
             var consumers = new List<Type> {typeof(CreateUserConsumer)};
             services.ConfigureRabbitMq(rabbitOptions, consumers);

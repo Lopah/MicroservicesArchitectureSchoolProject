@@ -18,14 +18,14 @@ namespace DemoApp.Worker.Services.GetProductsReceiver
     {
         private const string TopicName = "GetProductsResponse";
         private readonly ILogger<GetProductsReceiver> _logger;
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _dbContext;
         private IConnection _connection;
         private IModel _model;
 
-        public GetProductsReceiver(ILogger<GetProductsReceiver> logger, ApplicationDbContext context)
+        public GetProductsReceiver(ILogger<GetProductsReceiver> logger, ApplicationDbContext dbContext)
         {
             _logger = logger;
-            _context = context;
+            _dbContext = dbContext;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -78,8 +78,8 @@ namespace DemoApp.Worker.Services.GetProductsReceiver
                         Price = product.Price
                     };
 
-                    await _context.Products.AddAsync(dbProduct);
-                    await _context.SaveChangesAsync( );
+                    await _dbContext.Products.AddAsync(dbProduct);
+                    await _dbContext.SaveChangesAsync( );
 
                     _logger.LogInformation($"Created user with ID {dbProduct.Id} and name {dbProduct.Name}.");
 

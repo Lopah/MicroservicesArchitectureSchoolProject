@@ -21,8 +21,7 @@ namespace DemoApp.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews( );
-
-            services.ConfigureDatabase<ApplicationDbContext>(Configuration.GetConnectionString("DefaultConnection"));
+            services.ConfigureDatabase<ApplicationDbContext>("Web");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

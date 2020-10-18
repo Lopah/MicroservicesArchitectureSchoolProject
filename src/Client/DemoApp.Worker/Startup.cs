@@ -12,7 +12,7 @@ namespace DemoApp.Worker
         {
             var configuration = hostContext.Configuration;
 
-            services.ConfigureDatabase<ApplicationDbContext>("");
+            services.ConfigureDatabase<ApplicationDbContext>("Web");
 
             // register event bus -- singleton
 

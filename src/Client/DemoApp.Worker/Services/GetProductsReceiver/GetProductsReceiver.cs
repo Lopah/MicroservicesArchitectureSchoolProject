@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using DemoApp.Infrastructure;
+using DemoApp.Infrastructure.Events;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -8,28 +10,27 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using UsersService.Infrastructure.Data;
-using UsersService.Infrastructure.Data.Entites;
-using UsersService.Infrastructure.Events;
+using DemoApp.Infrastructure.SqlServer.DbEntities;
 
-namespace UsersService.Worker.Services.CreateUserReceiver
+namespace DemoApp.Worker.Services.GetProductsReceiver
 {
-    public class CreateUserReceiverService : IHostedService
+    public class GetProductsReceiver : IHostedService
     {
-        private const string TopicName = "CreateUser";
-        private readonly ILogger<CreateUserReceiverService> _logger;
-        private readonly ApplicationDbContext _applicationDbContext;
+        private const string TopicName = "GetProductsResponse";
+        private readonly ILogger<GetProductsReceiver> _logger;
+        private readonly ApplicationDbContext _context;
         private IConnection _connection;
         private IModel _model;
 
-        public CreateUserReceiverService(ILogger<CreateUserReceiverService> logger, ApplicationDbContext applicationDbContext)
+        public GetProductsReceiver(ILogger<GetProductsReceiver> logger, ApplicationDbContext context)
         {
             _logger = logger;
-            _applicationDbContext = applicationDbContext;
+            _context = context;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
+            _logger.LogInformation($"Starting {nameof(GetProductsReceiver)}");
             var connectionFactory = new ConnectionFactory
             {
                 UserName = "guest",
@@ -44,23 +45,22 @@ namespace UsersService.Worker.Services.CreateUserReceiver
             _model.QueueDeclarePassive(TopicName);
             _model.BasicQos(0, 1, false);
 
-
-            _logger.LogInformation($"{nameof(CreateUserReceiverService)} is now listening on topic {TopicName}.");
+            _logger.LogInformation($"{nameof(GetProductsReceiver)} is now listening on topic {TopicName}.");
 
             return Task.CompletedTask;
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"Stopping {nameof(CreateUserReceiverService)}");
+            _logger.LogInformation($"Stopping {nameof(GetProductsReceiver)}");
 
             _connection.Close( );
+
             return Task.CompletedTask;
         }
 
-        public Task Handle(CreateUserEvent evt)
+        private Task Handle(ProductEvent evt)
         {
-
             var consumer = new AsyncEventingBasicConsumer(_model);
             consumer.Received += async (bc, ea) =>
             {
@@ -68,20 +68,20 @@ namespace UsersService.Worker.Services.CreateUserReceiver
                 _logger.LogInformation($"Processing msg: '{message}'.");
                 try
                 {
-                    var user = JsonSerializer.Deserialize<CreateUserEvent>(message);
+                    var product = JsonSerializer.Deserialize<ProductEvent>(message);
 
-                    var dbUser = new User
+                    var dbProduct = new Product
                     {
-                        Id = Guid.NewGuid( ),
-                        Username = user.Username,
-                        Name = user.Name,
-                        Password = user.Password
+                        Id = product.Id,
+                        Name = product.Name,
+                        Amount = product.Amount,
+                        Price = product.Price
                     };
 
-                    await _applicationDbContext.Users.AddAsync(dbUser);
-                    await _applicationDbContext.SaveChangesAsync( );
+                    await _context.Products.AddAsync(dbProduct);
+                    await _context.SaveChangesAsync( );
 
-                    _logger.LogInformation($"Created user with ID {dbUser.Id} and username {dbUser.Username}");
+                    _logger.LogInformation($"Created user with ID {dbProduct.Id} and name {dbProduct.Name}.");
 
                     _model.BasicAck(ea.DeliveryTag, false);
                 }
@@ -99,9 +99,6 @@ namespace UsersService.Worker.Services.CreateUserReceiver
                     _logger.LogError(default, e, e.Message);
                 }
             };
-
-            _model.BasicConsume(queue: TopicName, autoAck: false, consumer: consumer);
-
             return Task.CompletedTask;
         }
     }

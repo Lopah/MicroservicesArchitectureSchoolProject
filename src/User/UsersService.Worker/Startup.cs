@@ -8,17 +8,20 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using UsersService.Infrastructure.Data;
 using UsersService.Worker.Services.CreateUserConsumer;
+using UsersService.Worker.Services.CreateUserReceiver;
+using UsersService.Worker.Services.UserCreatedPublisher;
 
 namespace UsersService.Worker
 {
     public class Startup : IStartup
     {
+        internal IConfiguration Configuration { get; private set; }
         public void ConfigureServices(HostBuilderContext hostContext, IServiceCollection services)
         {
-            var configuration = hostContext.Configuration;
+            Configuration = hostContext.Configuration;
 
             services.ConfigureDatabase<ApplicationDbContext>("Users");
-
+            
             var rabbitOptions = new RabbitMqSettings();
             configuration.GetSection("RabbitOptions").Bind(rabbitOptions);
 

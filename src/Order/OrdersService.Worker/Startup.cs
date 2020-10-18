@@ -9,6 +9,11 @@ using OrdersService.Worker.Services.Products.ProductCreatedEventConsumer;
 using OrdersService.Worker.Services.Users.UserCreatedEventConsumer;
 using System;
 using System.Collections.Generic;
+using OrdersService.Worker.Services.Orders.DeleteOrderEventConsumer;
+using OrdersService.Worker.Services.Products.ProductDeletedEventConsumer;
+using OrdersService.Worker.Services.Products.ProductEditedEventConsumer;
+using OrdersService.Worker.Services.Users.UserDeletedEventConsumer;
+using OrdersService.Worker.Services.Users.UserEditedEventConsumer;
 
 namespace OrdersService.Worker
 {
@@ -25,7 +30,17 @@ namespace OrdersService.Worker
             var rabbitOptions = new RabbitMqSettings( );
             Configuration.GetSection("RabbitOptions").Bind(rabbitOptions);
 
-            var consumers = new List<Type> { typeof(CreateOrderEventConsumer), typeof(UserCreatedEventConsumer), typeof(ProductCreatedEventConsumer) };
+            var consumers = new List<Type>
+            {
+                typeof(CreateOrderEventConsumer),
+                typeof(DeleteOrderEventConsumer),
+                typeof(ProductCreatedEventConsumer),
+                typeof(ProductEditedEventConsumer),
+                typeof(ProductDeletedEventConsumer),
+                typeof(UserCreatedEventConsumer),
+                typeof(UserEditedEventConsumer),
+                typeof(UserDeletedEventConsumer)
+            };
             services.ConfigureRabbitMq(rabbitOptions, consumers);
         }
     }

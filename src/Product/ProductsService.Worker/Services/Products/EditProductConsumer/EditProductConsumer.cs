@@ -1,27 +1,27 @@
 ﻿using DemoApp.Shared.Events.Products;
 using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ProductsService.Infrastructure.Data;
-using ProductsService.Infrastructure.Data.Entities;
 using System;
 using System.Threading.Tasks;
 
-namespace ProductsService.Worker.Services.CreateProductConsumer
+namespace ProductsService.Worker.Services.Products.EditProductConsumer
 {
-    public class CreateProductConsumer : IConsumer<CreateProductEvent>
+    public class EditProductConsumer : IConsumer<EditProductEvent>
     {
-        private readonly ILogger<CreateProductConsumer> _logger;
+        private readonly ILogger<EditProductConsumer> _logger;
         private readonly ApplicationDbContext _applicationDbContext;
         private readonly IPublishEndpoint _publishEndpoint;
 
-        public CreateProductConsumer(ILogger<CreateProductConsumer> logger, ApplicationDbContext applicationDbContext, IPublishEndpoint publishEndpoint)
+        public EditProductConsumer(ILogger<EditProductConsumer> logger, ApplicationDbContext applicationDbContext, IPublishEndpoint publishEndpoint)
         {
             _logger = logger;
             _applicationDbContext = applicationDbContext;
             _publishEndpoint = publishEndpoint;
         }
 
-        public async Task Consume(ConsumeContext<CreateProductEvent> context)
+        public async Task Consume(ConsumeContext<EditProductEvent> context)
         {
             _logger.LogInformation($"Processing msg: '{context.MessageId}' with topic: '{context.ConversationId}'.");
 
@@ -29,20 +29,19 @@ namespace ProductsService.Worker.Services.CreateProductConsumer
             {
                 var product = context.Message;
 
-                var dbProduct = new Product
-                {
-                    Id = Guid.NewGuid(),
-                    Name = product.Name,
-                    Amount = product.Amount,
-                    Price = product.Price
-                };
+                var dbProduct = await _applicationDbContext.Products.FirstOrDefaultAsync(x => x.Id == product.Id);
+                if (dbProduct == null)
+                    throw new ApplicationException("Product not found");
 
-                _applicationDbContext.Products.Add(dbProduct);
+                dbProduct.Name = product.Name;
+                dbProduct.Price = product.Price;
+                dbProduct.Amount = product.Amount;
+
                 await _applicationDbContext.SaveChangesAsync();
 
-                _logger.LogInformation($"Created product with ID {dbProduct.Id} and name {dbProduct.Name}");
+                _logger.LogInformation($"Edited product with ID {dbProduct.Id} and name {dbProduct.Name}");
 
-                await _publishEndpoint.Publish(new ProductCreatedEvent
+                await _publishEndpoint.Publish(new ProductEditedEvent
                 {
                     Id = dbProduct.Id,
                     Name = dbProduct.Name,

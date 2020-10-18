@@ -4,11 +4,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OrdersService.Infrastructure.Data;
-using OrdersService.Worker.Services.CreateOrderEventConsumer;
+using OrdersService.Worker.Services.Orders.CreateOrderEventConsumer;
+using OrdersService.Worker.Services.Products.ProductCreatedEventConsumer;
+using OrdersService.Worker.Services.Users.UserCreatedEventConsumer;
 using System;
 using System.Collections.Generic;
-using OrdersService.Worker.Services.ProductCreatedEventConsumer;
-using OrdersService.Worker.Services.UserCreatedEventConsumer;
 
 namespace OrdersService.Worker
 {

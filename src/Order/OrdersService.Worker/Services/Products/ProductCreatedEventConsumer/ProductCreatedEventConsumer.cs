@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DemoApp.Shared.Events.Products;
+﻿using DemoApp.Shared.Events.Products;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 using OrdersService.Infrastructure.Data;
 using OrdersService.Infrastructure.Data.Entities;
+using System.Threading.Tasks;
 
-namespace OrdersService.Worker.Services.ProductCreatedEventConsumer
+namespace OrdersService.Worker.Services.Products.ProductCreatedEventConsumer
 {
     public class ProductCreatedEventConsumer: IConsumer<ProductCreatedEvent>
     {
@@ -21,7 +17,7 @@ namespace OrdersService.Worker.Services.ProductCreatedEventConsumer
             _logger = logger;
             _context = context;
         }
-        public Task Consume(ConsumeContext<ProductCreatedEvent> context)
+        public async Task Consume(ConsumeContext<ProductCreatedEvent> context)
         {
             _logger.LogInformation($"Processing msg: '{context.MessageId}' with topic: '{context.ConversationId}'.");
 
@@ -35,11 +31,9 @@ namespace OrdersService.Worker.Services.ProductCreatedEventConsumer
 
             _context.OrderProducts.Add(product);
 
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             _logger.LogInformation($"Created product with ID {product.Id} with name {product.Name}.");
-
-            return Task.CompletedTask;
         }
     }
 }

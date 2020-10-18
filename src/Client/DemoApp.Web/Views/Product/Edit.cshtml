@@ -1,14 +1,14 @@
-﻿@model DemoApp.Web.Models.Products.CreateProductViewModel
+﻿@model DemoApp.Web.Models.Products.EditProductViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 
-<h1>Create</h1>
+<h1>Editing Product #@Model.Id</h1>
 <hr/>
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Edit" asp-route-id="@Model.Id">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -26,7 +26,7 @@
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary"/>
+                <input type="submit" value="Edit" class="btn btn-primary"/>
             </div>
         </form>
     </div>

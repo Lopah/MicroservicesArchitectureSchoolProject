@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using DemoApp.Core.Services;
 using DemoApp.Shared.Events.Users;
 using DemoApp.Web.Models.Users;
@@ -67,7 +68,7 @@ namespace DemoApp.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(string id, EditUserViewModel model)
+        public async Task<ActionResult> Edit(Guid id, EditUserViewModel model)
         {
             if (ModelState.IsValid)
             {

@@ -1,17 +1,15 @@
-﻿using DemoApp.Infrastructure;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using MassTransit.RabbitMqTransport.Integration;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
+using System;
+using System.Text.Json;
+using System.Threading.Tasks;
 using UsersService.Infrastructure.Events;
 
 namespace UsersService.Worker.Services.UserCreatedPublisher
 {
-    public class UserCreatedPublisherService : IHostedService
+    public class UserCreatedPublisherService : IPublisher
     {
 
         private const string TopicName = "UserCreated";
@@ -24,34 +22,7 @@ namespace UsersService.Worker.Services.UserCreatedPublisher
             _logger = logger;
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            var connectionFactory = new ConnectionFactory
-            {
-                UserName = "ops1",
-                Password = "ops1",
-                HostName = "localhost",
-                Port = 5672
-            };
-
-            _connection = connectionFactory.CreateConnection( );
-            _channel = _connection.CreateModel( );
-            _channel.QueueDeclarePassive(TopicName);
-            _channel.BasicQos(0, 1, false);
-
-
-            _logger.LogInformation($"Queue [{TopicName}] is waiting for messages.");
-
-            return Task.CompletedTask;
-        }
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            _connection.Close( );
-            _logger.LogInformation($"Service {nameof(UserCreatedPublisherService)} was stopped.");
-            return Task.CompletedTask;
-        }
-
-        private async Task Handle(UserCreatedEvent evt)
+        private Task Handle(UserCreatedEvent evt)
         {
             try
             {
@@ -63,6 +34,19 @@ namespace UsersService.Worker.Services.UserCreatedPublisher
             {
                 _logger.LogError("RabbitMQ is closed! : ", closedException.ShutdownReason);
             }
+
+            return Task.CompletedTask;
+        }
+
+        public ValueTask DisposeAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Publish(string exchange, string routingKey, bool mandatory, IBasicProperties basicProperties, byte[] body,
+            bool awaitAck)
+        {
+            throw new NotImplementedException();
         }
     }
 }

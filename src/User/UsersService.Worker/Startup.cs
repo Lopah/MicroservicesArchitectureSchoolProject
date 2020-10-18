@@ -3,6 +3,8 @@ using DemoApp.Shared.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using UsersService.Infrastructure.Data;
+using UsersService.Infrastructure.Events;
+using UsersService.Worker.Services.CreateUserConsumer;
 
 namespace UsersService.Worker
 {
@@ -13,6 +15,10 @@ namespace UsersService.Worker
             var configuration = hostContext.Configuration;
 
             services.ConfigureDatabase<ApplicationDbContext>("Users");
+
+            var rabbitConfig = configuration.GetSection("Rabbitmq");
+
+            services.ConfigureRabbitMq<CreateUserConsumer, CreateUserEvent>(rabbitConfig);
         }
     }
 }

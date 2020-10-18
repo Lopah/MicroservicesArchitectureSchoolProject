@@ -11,15 +11,15 @@ namespace UsersService.Worker.Services.CreateUserConsumer
 {
     public class CreateUserConsumer : IConsumer<CreateUserEvent>
     {
-        private readonly ILogger<CreateUserConsumer> logger;
-        private readonly ApplicationDbContext applicationDbContext;
-        private readonly IPublishEndpoint publishEndpoint;
+        private readonly ILogger<CreateUserConsumer> _logger;
+        private readonly ApplicationDbContext _applicationDbContext;
+        private readonly IPublishEndpoint _publishEndpoint;
 
         public CreateUserConsumer(ILogger<CreateUserConsumer> logger, ApplicationDbContext applicationDbContext, IPublishEndpoint publishEndpoint)
         {
-            this.logger = logger;
-            this.applicationDbContext = applicationDbContext;
-            this.publishEndpoint = publishEndpoint;
+            _logger = logger;
+            _applicationDbContext = applicationDbContext;
+            _publishEndpoint = publishEndpoint;
         }
 
         public async Task Consume(ConsumeContext<CreateUserEvent> context)
@@ -36,12 +36,12 @@ namespace UsersService.Worker.Services.CreateUserConsumer
                     Password = user.Password
                 };
 
-                await applicationDbContext.Users.AddAsync(dbUser);
-                await applicationDbContext.SaveChangesAsync();
+                await _applicationDbContext.Users.AddAsync(dbUser);
+                await _applicationDbContext.SaveChangesAsync();
 
-                logger.LogInformation($"Created user with ID {dbUser.Id} and username {dbUser.Username}");
+                _logger.LogInformation($"Created user with ID {dbUser.Id} and username {dbUser.Username}");
 
-                await publishEndpoint.Publish(new UserCreatedEvent
+                await _publishEndpoint.Publish(new UserCreatedEvent
                 {
                     Id = dbUser.Id,
                     Username = dbUser.Username,
@@ -51,7 +51,7 @@ namespace UsersService.Worker.Services.CreateUserConsumer
             }
             catch (Exception ex)
             {
-                logger.LogError(default, ex, ex.Message);
+                _logger.LogError(default, ex, ex.Message);
                 throw;
             }
         }

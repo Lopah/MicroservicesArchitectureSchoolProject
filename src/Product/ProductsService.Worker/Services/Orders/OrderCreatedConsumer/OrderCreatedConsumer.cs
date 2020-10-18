@@ -7,7 +7,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProductsService.Worker.Services.OrderCreatedConsumer
+namespace ProductsService.Worker.Services.Orders.OrderCreatedConsumer
 {
     public class OrderCreatedConsumer : IConsumer<OrderCreatedEvent>
     {

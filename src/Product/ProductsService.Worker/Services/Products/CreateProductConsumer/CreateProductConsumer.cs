@@ -6,7 +6,7 @@ using ProductsService.Infrastructure.Data.Entities;
 using System;
 using System.Threading.Tasks;
 
-namespace ProductsService.Worker.Services.CreateProductConsumer
+namespace ProductsService.Worker.Services.Products.CreateProductConsumer
 {
     public class CreateProductConsumer : IConsumer<CreateProductEvent>
     {

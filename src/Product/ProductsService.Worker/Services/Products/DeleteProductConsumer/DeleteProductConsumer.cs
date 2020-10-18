@@ -6,7 +6,7 @@ using ProductsService.Infrastructure.Data.Entities;
 using System;
 using System.Threading.Tasks;
 
-namespace ProductsService.Worker.Services.DeleteProductConsumer
+namespace ProductsService.Worker.Services.Products.DeleteProductConsumer
 {
     public class DeleteProductConsumer : IConsumer<DeleteProductEvent>
     {

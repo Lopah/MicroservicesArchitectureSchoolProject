@@ -6,7 +6,7 @@ using ProductsService.Infrastructure.Data;
 using System;
 using System.Threading.Tasks;
 
-namespace ProductsService.Worker.Services.EditProductConsumer
+namespace ProductsService.Worker.Services.Products.EditProductConsumer
 {
     public class EditProductConsumer : IConsumer<EditProductEvent>
     {

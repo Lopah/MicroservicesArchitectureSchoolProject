@@ -4,12 +4,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ProductsService.Infrastructure.Data;
-using ProductsService.Worker.Services.CreateProductConsumer;
-using ProductsService.Worker.Services.DeleteProductConsumer;
-using ProductsService.Worker.Services.EditProductConsumer;
-using ProductsService.Worker.Services.OrderCreatedConsumer;
 using System;
 using System.Collections.Generic;
+
+using ProductServices = ProductsService.Worker.Services.Products;
+using OrderServices = ProductsService.Worker.Services.Orders;
 
 namespace ProductsService.Worker
 {
@@ -26,10 +25,11 @@ namespace ProductsService.Worker
 
             var consumers = new List<Type> 
             { 
-                typeof(CreateProductConsumer),
-                typeof(EditProductConsumer),
-                typeof(DeleteProductConsumer),
-                typeof(OrderCreatedConsumer)
+                typeof(ProductServices.CreateProductConsumer.CreateProductConsumer),
+                typeof(ProductServices.EditProductConsumer.EditProductConsumer),
+                typeof(ProductServices.DeleteProductConsumer.DeleteProductConsumer),
+                typeof(OrderServices.OrderCreatedConsumer.OrderCreatedConsumer),
+                typeof(OrderServices.OrderDeletedConsumer.OrderDeletedConsumer)
             };
 
             services.ConfigureRabbitMq(rabbitOptions, consumers);

@@ -21,7 +21,6 @@ namespace DemoApp.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews( );
-
             services.ConfigureDatabase<ApplicationDbContext>("Web");
         }
 

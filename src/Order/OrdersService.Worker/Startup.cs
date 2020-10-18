@@ -19,7 +19,8 @@ namespace OrdersService.Worker
         {
             Configuration = hostContext.Configuration;
 
-            services.ConfigureDatabase<ApplicationDbContext>("Orders");
+            var connectionString = Configuration.GetConnectionString("Postgres");
+            services.ConfigurePostgresDatabase<ApplicationDbContext>(connectionString);
 
             var rabbitOptions = new RabbitMqSettings( );
             Configuration.GetSection("RabbitOptions").Bind(rabbitOptions);

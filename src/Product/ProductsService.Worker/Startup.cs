@@ -18,7 +18,8 @@ namespace ProductsService.Worker
         {
             var configuration = hostContext.Configuration;
 
-            services.ConfigureDatabase<ApplicationDbContext>("Products");
+            var connectionString = configuration.GetConnectionString("Postgres");
+            services.ConfigurePostgresDatabase<ApplicationDbContext>(connectionString);
 
             var rabbitOptions = new RabbitMqSettings();
             configuration.GetSection("RabbitOptions").Bind(rabbitOptions);

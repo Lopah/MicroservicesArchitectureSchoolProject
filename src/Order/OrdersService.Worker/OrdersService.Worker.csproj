@@ -12,7 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Services\CreateOrderEventConsumer\CreateOrderEventPublisher.cs" />
+    <Compile Include="Services\CreateOrderEventConsumer\CreateOrderEventConsumer.cs" />
+    <Compile Include="Services\ProductCreatedEventConsumer\ProductCreatedEventConsumer.cs" />
     <Compile Include="Services\UserCreatedEventConsumer\UserCreatedEventConsumer.cs" />
   </ItemGroup>
 

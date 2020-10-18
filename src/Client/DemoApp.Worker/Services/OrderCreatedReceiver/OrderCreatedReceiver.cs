@@ -1,33 +1,34 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using DemoApp.Infrastructure;
+using DemoApp.Infrastructure.Events;
+using DemoApp.Infrastructure.SqlServer.DbEntities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
 using System;
+using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using UsersService.Infrastructure.Data;
-using UsersService.Infrastructure.Data.Entites;
-using UsersService.Infrastructure.Events;
 
-namespace UsersService.Worker.Services.CreateUserReceiver
+namespace DemoApp.Worker.Services.OrderCreatedReceiver
 {
-    public class CreateUserReceiverService : IHostedService
+    public class OrderCreatedReceiver : IHostedService
     {
-        private const string TopicName = "CreateUser";
-        private readonly ILogger<CreateUserReceiverService> _logger;
-        private readonly ApplicationDbContext _applicationDbContext;
+        private const string TopicName = "OrderCreated";
+        private readonly ILogger<OrderCreatedReceiver> _logger;
+        private readonly ApplicationDbContext _context;
         private IConnection _connection;
         private IModel _model;
 
-        public CreateUserReceiverService(ILogger<CreateUserReceiverService> logger, ApplicationDbContext applicationDbContext)
+        public OrderCreatedReceiver(ILogger<OrderCreatedReceiver> logger, ApplicationDbContext context)
         {
             _logger = logger;
-            _applicationDbContext = applicationDbContext;
+            _context = context;
         }
-
         public Task StartAsync(CancellationToken cancellationToken)
         {
             var connectionFactory = new ConnectionFactory
@@ -44,23 +45,21 @@ namespace UsersService.Worker.Services.CreateUserReceiver
             _model.QueueDeclarePassive(TopicName);
             _model.BasicQos(0, 1, false);
 
-
-            _logger.LogInformation($"{nameof(CreateUserReceiverService)} is now listening on topic {TopicName}.");
+            _logger.LogInformation($"{nameof(OrderCreatedReceiver)} is now listening on topic {TopicName}.");
 
             return Task.CompletedTask;
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"Stopping {nameof(CreateUserReceiverService)}");
+            _logger.LogInformation($"Stopping {nameof(OrderCreatedReceiver)}.");
 
             _connection.Close( );
             return Task.CompletedTask;
         }
 
-        public Task Handle(CreateUserEvent evt)
+        public Task Handle(OrderCreatedEvent evt, CancellationToken cancellationToken)
         {
-
             var consumer = new AsyncEventingBasicConsumer(_model);
             consumer.Received += async (bc, ea) =>
             {
@@ -68,18 +67,22 @@ namespace UsersService.Worker.Services.CreateUserReceiver
                 _logger.LogInformation($"Processing msg: '{message}'.");
                 try
                 {
-                    var user = JsonSerializer.Deserialize<CreateUserEvent>(message);
+                    var orderReceived = JsonSerializer.Deserialize<OrderCreatedEvent>(message);
 
-                    var dbUser = new User
+                    var dbUser = await _context.Users
+                        .Where(e => e.Id == orderReceived.UserId)
+                        .FirstOrDefaultAsync(cancellationToken: cancellationToken);
+
+                    var dbOrder = new Order
                     {
-                        Id = Guid.NewGuid( ),
-                        Username = user.Username,
-                        Name = user.Name,
-                        Password = user.Password
+                        Products = orderReceived.Products,
+                        Id = orderReceived.OrderId,
+                        TotalPrice = orderReceived.Products.Sum(x => x.Price)
                     };
 
-                    await _applicationDbContext.Users.AddAsync(dbUser);
-                    await _applicationDbContext.SaveChangesAsync( );
+                    dbUser.Orders.Add(dbOrder);
+
+                    await _context.SaveChangesAsync(cancellationToken);
 
                     _logger.LogInformation($"Created user with ID {dbUser.Id} and username {dbUser.Username}");
 
@@ -99,8 +102,6 @@ namespace UsersService.Worker.Services.CreateUserReceiver
                     _logger.LogError(default, e, e.Message);
                 }
             };
-
-            _model.BasicConsume(queue: TopicName, autoAck: false, consumer: consumer);
 
             return Task.CompletedTask;
         }

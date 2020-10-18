@@ -1,6 +1,10 @@
-﻿using DemoApp.Infrastructure;
+﻿using System;
+using System.Collections.Generic;
 using DemoApp.Shared.Config;
 using DemoApp.Shared.Hosting;
+using DemoApp.Worker.Services.ProductCreatedConsumer;
+using DemoApp.Worker.Services.UserCreatedConsumer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -12,11 +16,15 @@ namespace DemoApp.Worker
         {
             var configuration = hostContext.Configuration;
 
-            services.ConfigureDatabase<ApplicationDbContext>("Web");
+            var rabbitOptions = new RabbitMqSettings();
+            configuration.GetSection("RabbitOptions").Bind(rabbitOptions);
 
-            // register event bus -- singleton
-
-            // register core functionality
+            var consumers = new List<Type>
+            {
+                typeof(UserCreatedConsumer),
+                typeof(ProductCreatedConsumer)
+            };
+            services.ConfigureRabbitMq(rabbitOptions, consumers);
         }
     }
 }

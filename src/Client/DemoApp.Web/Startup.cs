@@ -1,3 +1,5 @@
+using DemoApp.Core.Config;
+using DemoApp.Core.Services;
 using DemoApp.Infrastructure;
 using DemoApp.Shared.Config;
 using Microsoft.AspNetCore.Builder;
@@ -21,14 +23,24 @@ namespace DemoApp.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews( );
-            services.ConfigureDatabase<ApplicationDbContext>("Web");
 
-            var rabbitOptions = new RabbitMqSettings();
-            var section = Configuration.GetSection("RabbitOptions");
-            section.Bind(rabbitOptions);
-            services.Configure<RabbitMqSettings>(section);
+            #region AppSettings
 
-            services.ConfigureRabbitMq(rabbitOptions);
+            var appSettings = new AppSettings();
+            var section = Configuration.GetSection("AppSettings");
+            section.Bind(appSettings);
+            services.Configure<AppSettings>(section);
+
+            #endregion
+
+            #region Services
+
+            services.AddHttpClient();
+            services.AddScoped<IUserService,UserService>();
+
+            #endregion
+
+            services.ConfigureRabbitMq(appSettings.RabbitOptions);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

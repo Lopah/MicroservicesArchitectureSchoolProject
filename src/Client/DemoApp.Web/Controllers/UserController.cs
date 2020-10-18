@@ -1,61 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using DemoApp.Infrastructure;
-using DemoApp.Shared.Config;
-using DemoApp.Shared.Events;
+﻿using System.Threading.Tasks;
+using DemoApp.Core.Services;
 using DemoApp.Shared.Events.Users;
-using DemoApp.Web.Models;
+using DemoApp.Web.Models.Users;
 using MassTransit;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Microsoft.VisualBasic;
+using CreateUserEvent = DemoApp.Shared.Events.Users.CreateUserEvent;
 
 namespace DemoApp.Web.Controllers
 {
     public class UserController : Controller
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly IUserService _userService;
         private readonly IPublishEndpoint _publishEndpoint;
-        private readonly RabbitMqSettings _settings;
 
-        public UserController(ApplicationDbContext dbContext, IOptions<RabbitMqSettings> settings, IPublishEndpoint publishEndpoint)
+        public UserController(IUserService userService, IPublishEndpoint publishEndpoint)
         {
-            _dbContext = dbContext;
+            _userService = userService;
             _publishEndpoint = publishEndpoint;
-            _settings = settings?.Value;
         }
 
-        // GET: Account
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var test = new List<(int, string)>()
-            {
-                (1, "Pepa"),
-                (2, "Franta")
-            };
-
-            var model = new UsersViewModel(test);
+            var users = await _userService.GetAllUsersAsync();
+            var model = new UsersViewModel(users);
             return View(model);
         }
 
-        // GET: Account/Create
         public ActionResult Create()
         {
             var model = new CreateUserViewModel();
             return View(model);
         }
 
-        // POST: Account/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(CreateUserViewModel model)
         {
             if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
                 var userEvent = new CreateUserEvent
                 {
                     Name = model.Name,
@@ -66,6 +48,40 @@ namespace DemoApp.Web.Controllers
                 try
                 {
                     await _publishEndpoint.Publish<CreateUserEvent>(userEvent);
+                }
+                catch
+                {
+                    ModelState.AddModelError(string.Empty, "Error - Create User Event Publish" );
+                }
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(model);
+        }
+
+        public ActionResult Edit()
+        {
+            var model = new EditUserViewModel();
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(string id, EditUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var userEvent = new EditUserEvent()
+                {
+                    Id = model.Id,
+                    Name = model.Name,
+                    Username = model.Username,
+                    Password = model.Password
+                };
+
+                try
+                {
+                    await _publishEndpoint.Publish<EditUserViewModel>(userEvent);
                 }
                 catch
                 {

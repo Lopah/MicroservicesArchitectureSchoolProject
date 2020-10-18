@@ -18,5 +18,5 @@ namespace DemoApp.Shared.Events.Orders
         }
     }
 
-        
+
 }

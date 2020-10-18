@@ -25,12 +25,6 @@ namespace DemoApp.Shared.Config
             dbContext?.Database.EnsureCreated();
         }
 
-        public static void ConfigureDatabase<T>(this IServiceCollection services, string databaseName) where T : DbContext
-        {
-            services.AddDbContext<T>(options =>
-                options.UseInMemoryDatabase(databaseName));
-        }
-
         public static void ConfigureRabbitMq(this IServiceCollection services, RabbitMqSettings settings, List<Type> consumers = null)
         {
             if(consumers is null)

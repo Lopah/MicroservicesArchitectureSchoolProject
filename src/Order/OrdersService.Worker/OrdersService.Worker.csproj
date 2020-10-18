@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -12,6 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="appsettings.Development.json" />
+    <None Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="Services\Orders\CreateOrderEventConsumer\CreateOrderEventConsumer.cs" />
     <Compile Include="Services\Orders\DeleteOrderEventConsumer\DeleteOrderEventConsumer.cs" />
     <Compile Include="Services\Products\ProductCreatedEventConsumer\ProductCreatedEventConsumer.cs" />
@@ -20,6 +25,19 @@
     <Compile Include="Services\Users\UserCreatedEventConsumer\UserCreatedEventConsumer.cs" />
     <Compile Include="Services\Users\UserDeletedEventConsumer\UserDeletedEventConsumer.cs" />
     <Compile Include="Services\Users\UserEditedEventConsumer\UserEditedEventConsumer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.Development.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

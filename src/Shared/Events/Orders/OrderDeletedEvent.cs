@@ -6,7 +6,7 @@ namespace DemoApp.Shared.Events.Orders
     public class OrderDeletedEvent
     {
         public Guid Id { get; set; }
-        public ICollection<ProductDto> Products { get; set; }
+        public IEnumerable<ProductDto> Products { get; set; }
 
         public class ProductDto
         {

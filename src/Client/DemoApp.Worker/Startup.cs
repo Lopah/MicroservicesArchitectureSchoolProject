@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using DemoApp.Shared.Config;
 using DemoApp.Shared.Hosting;
+using DemoApp.Worker.Services.OrderCreatedReceiver;
 using DemoApp.Worker.Services.ProductCreatedConsumer;
 using DemoApp.Worker.Services.UserCreatedConsumer;
 using Microsoft.Extensions.Configuration;
@@ -22,7 +23,8 @@ namespace DemoApp.Worker
             var consumers = new List<Type>
             {
                 typeof(UserCreatedConsumer),
-                typeof(ProductCreatedConsumer)
+                typeof(ProductCreatedConsumer),
+                typeof(OrderCreatedConsumer)
             };
             services.ConfigureRabbitMq(rabbitOptions, consumers);
         }

@@ -1,4 +1,5 @@
 ﻿using DemoApp.Infrastructure;
+using DemoApp.Shared.Config;
 using DemoApp.Shared.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -11,7 +12,7 @@ namespace DemoApp.Worker
         {
             var configuration = hostContext.Configuration;
 
-            services.ConfigureDatabase("");
+            services.ConfigureDatabase<ApplicationDbContext>("Web");
 
             // register event bus -- singleton
 

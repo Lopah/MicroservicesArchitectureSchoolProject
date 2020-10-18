@@ -8,7 +8,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace OrdersService.Worker.Services.CreateOrderEventConsumer
+namespace OrdersService.Worker.Services.Orders.CreateOrderEventConsumer
 {
     public class CreateOrderEventConsumer : IConsumer<CreateOrderEvent>
     {
@@ -28,17 +28,16 @@ namespace OrdersService.Worker.Services.CreateOrderEventConsumer
 
             var order = new Order
             {
-                Id = new Guid(),
+                Id = new Guid( ),
                 OrderUser = await _context.OrderUsers
                     .FirstOrDefaultAsync(e => e.Id == context.Message.UserId),
                 OrderProducts = await _context.OrderProducts
                     .Where(e => context.Message.ProductIds.Contains(e.Id))
-                    .ToListAsync(),
+                    .ToListAsync( ),
             };
 
             _context.Orders.Add(order);
-
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync( );
 
             _logger.LogInformation($"Created user with ID {order.Id} for user {order.OrderUser.Name}");
 

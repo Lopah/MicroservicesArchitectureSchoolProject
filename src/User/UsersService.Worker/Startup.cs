@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using UsersService.Infrastructure.Data;
 using UsersService.Worker.Services.CreateUserConsumer;
+using UsersService.Worker.Services.DeleteUserConsumer;
+using UsersService.Worker.Services.EditUserConsumer;
 
 namespace UsersService.Worker
 {
@@ -23,7 +25,7 @@ namespace UsersService.Worker
             var rabbitOptions = new RabbitMqSettings();
             Configuration.GetSection("RabbitOptions").Bind(rabbitOptions);
 
-            var consumers = new List<Type> {typeof(CreateUserConsumer)};
+            var consumers = new List<Type> {typeof(CreateUserConsumer), typeof(EditUserConsumer), typeof(DeleteUserConsumer)};
             services.ConfigureRabbitMq(rabbitOptions, consumers);
         }
     }

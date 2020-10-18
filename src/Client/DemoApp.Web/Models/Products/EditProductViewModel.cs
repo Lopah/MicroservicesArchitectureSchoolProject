@@ -1,6 +1,6 @@
-namespace DemoApp.Core.Models.Products
+namespace DemoApp.Web.Models.Products
 {
-    public class ProductDto
+    public class EditProductViewModel
     {
         public string Id { get; set; }
         public string Name { get; set; }

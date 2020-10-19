@@ -1,0 +1,70 @@
+﻿@model DemoApp.Web.Models.Orders.OrderDetailViewModel
+
+@{
+    ViewData["Title"] = "Detail";
+}
+
+<h1>Order Detail</h1>
+<div>
+    <a asp-action="Delete" asp-route-id="@Model.Data.OrderId" class="btn btn-danger">Delete</a>
+</div>
+<br/>
+<div class="card">
+    <div class="card-header">
+        Order - @Model.Data.OrderId
+    </div>
+    <div class="card-body">
+        <p>
+            User: <a asp-action="Detail" asp-controller="User" asp-route-id="@Model.Data.UserId">@Model.Data.User</a>
+        </p>
+        <hr/>
+        <h2>Products</h2>
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>
+                    Product Name
+                </th>
+                <th>
+                    Amount
+                </th>
+                <th>
+                    Price
+                </th>
+                <th>
+                    Total Price
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var product in Model.Data.Products)
+            {
+                <tr>
+                    <td>
+                        @product.Name
+                    </td>
+                    <td>
+                        @product.Amount
+                    </td>
+                    <td>
+                        @product.Price
+                    </td>
+                    <td>
+                        @(product.Amount * product.Price)
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td></td>
+                <td></td>
+                <th class="text-right">Total Price:</th>
+                <th class="text-left">@Model.Data.Products.Sum(p => p.Amount * p.Price) CZK</th>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<br/>
+<div>
+    <a asp-action="Index" class="btn btn-info">Back to List</a>
+</div>

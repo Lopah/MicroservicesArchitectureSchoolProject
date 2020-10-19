@@ -1,0 +1,80 @@
+﻿@model DemoApp.Web.Models.Users.UserDetailViewModel
+
+@{
+    ViewData["Title"] = "Detail";
+}
+
+<h1>User Detail</h1>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-info">Edit</a>
+    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+</div>
+<br/>
+<div class="card">
+    <div class="card-header">
+        User - @Model.Id
+    </div>
+    <div class="card-body">
+        <p>
+            <b>Name:</b> @Model.Name
+        </p>
+        <hr/>
+        <p>
+            <b>Username:</b> @Model.Username
+        </p>
+        <p><b>Password:</b> ******</p>
+        <hr/>
+        <h2>Orders</h2>
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>
+                    ID
+                </th>
+                <th>
+                    Created On
+                </th>
+                <th>
+                    Products Count
+                </th>
+                <th>
+                    Total product items
+                </th>
+                <th>
+                    Total price
+                </th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var order in Model.Orders)
+            {
+                <tr>
+                    <td>
+                        @order.OrderId
+                    </td>
+                    <td>
+                        @order.CreatedOn.ToShortDateString()
+                    </td>
+                    <td>
+                        @order.Products.Count
+                    </td>
+                    <td>
+                        @order.Products.Sum(p => p.Amount)
+                    </td>
+                    <td>
+                        @order.TotalPrice CZK
+                    </td>
+                    <td>
+                        <a asp-action="Detail" asp-controller="Order" asp-route-id="@order.OrderId">Details</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+<br/>
+<div>
+    <a asp-action="Index" class="btn btn-info">Back to List</a>
+</div>

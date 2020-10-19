@@ -64,6 +64,35 @@ namespace DemoApp.Core.Services.Orders
             return result.Deserialize<List<OrderDto>>();
         }
 
+        public async Task<List<OrderUserDto>> GetUsersAsync()
+        {
+            var client = this.GetClient();
+            var response = await client.GetAsync($"api/orders/users");
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception("Order service not available.");
+            }
+
+            var result = await response.Content.ReadAsStringAsync();
+
+            return result.Deserialize<List<OrderUserDto>>();
+        }
+
+        public async Task<List<OrderProductDto>> GetProductsAsync()
+        {
+            var client = this.GetClient();
+            var response = await client.GetAsync($"api/orders/products");
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception("Order service not available.");
+            }
+
+            var result = await response.Content.ReadAsStringAsync();
+
+            return result.Deserialize<List<OrderProductDto>>();
+        }
+
+
         private HttpClient GetClient()
         {
             var client = _clientFactory.CreateClient(HttpClientName);

@@ -9,6 +9,8 @@ namespace DemoApp.Core.Services.Orders
     {
         Task<List<OrderDto>> GetAllOrdersAsync();
         Task<List<OrderDto>> GetOrdersForUserAsync(Guid id);
+        Task<List<OrderUserDto>> GetUsersAsync();
+        Task<List<OrderProductDto>> GetProductsAsync();
         Task<OrderDto> GetOrderAsync(Guid id);
     }
 }

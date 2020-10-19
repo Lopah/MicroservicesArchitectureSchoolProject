@@ -37,6 +37,20 @@ namespace OrdersService.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet("users")]
+        public async Task<ActionResult<OrderUser>> GetOrderUsers()
+        {
+            var orderUsers = await _context.OrderUsers.ToListAsync();
+            return Ok(orderUsers);
+        }
+
+        [HttpGet("products")]
+        public async Task<ActionResult<OrderProduct>> GetOrderProducts()
+        {
+            var orderProducts = await _context.OrderProducts.ToListAsync();
+            return Ok(orderProducts);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<OrderDto>> GetOrder(Guid id)
         {
@@ -51,7 +65,7 @@ namespace OrdersService.API.Controllers
         }
 
 
-        [HttpGet("/user/{id}")]
+        [HttpGet("user/{id}")]
         public async Task<ActionResult<List<OrderDto>>> GetOrdersForUser(Guid id)
         {
             var orders = await _context.Orders

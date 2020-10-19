@@ -35,10 +35,20 @@ namespace DemoApp.Web.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> Detail(Guid id)
+        {
+            var order = await _orderService.GetOrderAsync(id);
+            if (order is null)
+                return NotFound();
+
+            var model = new OrderDetailViewModel(order);
+            return View(model);
+        }
+
         public async Task<IActionResult> Create()
         {
-            var users = await _userService.GetAllUsersAsync();
-            var products = await _productService.GetAllProductsAsync();
+            var users = await _orderService.GetUsersAsync();
+            var products = await _orderService.GetProductsAsync();
             var model = new CreateOrderViewModel(users, products);
             return View(model);
         }
@@ -50,7 +60,7 @@ namespace DemoApp.Web.Controllers
             if (ModelState.IsValid)
             {
                 var filteredProducts = model.Products.Where(p => p.Amount > 0).ToList();
-                var userEvent = new CreateOrderEvent
+                var orderEvent = new CreateOrderEvent
                 {
                     UserId = model.UserId,
                     Products = filteredProducts.Select(p => new CreateOrderEvent.CreateOrderEventProductDto(p.Id, p.Amount)).ToList()
@@ -58,7 +68,7 @@ namespace DemoApp.Web.Controllers
 
                 try
                 {
-                    await _publishEndpoint.Publish<CreateOrderEvent>(userEvent);
+                    await _publishEndpoint.Publish<CreateOrderEvent>(orderEvent);
                     return RedirectToAction(nameof(Index), new { success = true });
                 }
                 catch
@@ -67,8 +77,8 @@ namespace DemoApp.Web.Controllers
                 }
             }
 
-            model.SetUserList(await _userService.GetAllUsersAsync());
-            model.SetProductList(await _productService.GetAllProductsAsync());
+            model.SetUserList(await _orderService.GetUsersAsync());
+            model.SetProductList(await _orderService.GetProductsAsync());
             return View(model);
         }
 

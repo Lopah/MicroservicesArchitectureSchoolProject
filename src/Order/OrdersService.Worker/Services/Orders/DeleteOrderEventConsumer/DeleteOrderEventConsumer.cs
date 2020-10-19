@@ -25,6 +25,7 @@ namespace OrdersService.Worker.Services.Orders.DeleteOrderEventConsumer
             _logger.LogInformation($"Processing msg: '{context.MessageId}' with topic: '{context.ConversationId}'.");
 
             var order = await _context.Orders
+                .Include(o => o.OrderUser)
                 .Include(o => o.OrderProducts)
                 .FirstOrDefaultAsync(e => e.Id == context.Message.Id);
 

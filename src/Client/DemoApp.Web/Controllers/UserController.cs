@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using DemoApp.Core.Services;
+using DemoApp.Core.Services.Orders;
 using DemoApp.Core.Services.Users;
 using DemoApp.Shared.Events.Users;
 using DemoApp.Web.Models.Users;
@@ -13,11 +14,13 @@ namespace DemoApp.Web.Controllers
     public class UserController : Controller
     {
         private readonly IUserService _userService;
+        private readonly IOrderService _orderService;
         private readonly IPublishEndpoint _publishEndpoint;
 
-        public UserController(IUserService userService, IPublishEndpoint publishEndpoint)
+        public UserController(IUserService userService, IOrderService orderService, IPublishEndpoint publishEndpoint)
         {
             _userService = userService;
+            _orderService = orderService;
             _publishEndpoint = publishEndpoint;
         }
 
@@ -28,6 +31,18 @@ namespace DemoApp.Web.Controllers
             model.ShowSuccess = success;
             return View(model);
         }
+
+        public async Task<IActionResult> Detail(Guid id)
+        {
+            var user = await _userService.GetUserAsync(id);
+            if (user is null)
+                return NotFound();
+
+            var orders = await _orderService.GetOrdersForUserAsync(id);
+            var model = new UserDetailViewModel(user, orders);
+            return View(model);
+        }
+
 
         public ActionResult Create()
         {

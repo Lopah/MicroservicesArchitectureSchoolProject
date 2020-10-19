@@ -52,6 +52,7 @@ namespace DemoApp.Shared.Config
                             {
                                 //Configure Rabbitmq exchange properties
                                 ep.PrefetchCount = settings.PrefetchCount;
+                                ep.Durable = true;
 
                                 foreach (var consumerType in consumer.ConsumerTypes)
                                 {

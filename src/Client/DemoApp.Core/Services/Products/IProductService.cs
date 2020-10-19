@@ -9,5 +9,6 @@ namespace DemoApp.Core.Services.Products
     {
         Task<List<ProductDto>> GetAllProductsAsync();
         Task<ProductDto> GetProductAsync(Guid id);
+        Task DeleteProductAsync(Guid id);
     }
 }

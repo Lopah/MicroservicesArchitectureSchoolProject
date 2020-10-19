@@ -26,7 +26,10 @@ namespace UsersService.Worker
             var rabbitOptions = new RabbitMqSettings();
             Configuration.GetSection("RabbitOptions").Bind(rabbitOptions);
 
-            var consumers = new List<Type> {typeof(CreateUserConsumer), typeof(EditUserConsumer), typeof(DeleteUserConsumer)};
+
+            var consumers = new List<(string endpoint, List<Type>)>();
+            var userConsumers = new List<Type> {typeof(CreateUserConsumer), typeof(EditUserConsumer), typeof(DeleteUserConsumer)};
+            consumers.Add(("users", userConsumers));
             services.ConfigureRabbitMq(rabbitOptions, consumers);
         }
     }

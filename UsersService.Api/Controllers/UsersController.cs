@@ -9,7 +9,7 @@ using UsersService.Infrastructure.Data.Entities;
 namespace UsersService.Api.Controllers
 {
     [Route("api/[controller]")]
-    public class UsersController
+    public class UsersController: ControllerBase
     {
         private readonly ApplicationDbContext _dbContext;
 
@@ -29,7 +29,23 @@ namespace UsersService.Api.Controllers
         public async Task<ActionResult<User>> GetOne(Guid id)
         {
             var user = await _dbContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
+            if (user is null)
+                return NotFound();
+
             return user;
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var user = await _dbContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
+            if (user is null)
+                return NotFound();
+
+            _dbContext.Users.Remove(user);
+            await _dbContext.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }

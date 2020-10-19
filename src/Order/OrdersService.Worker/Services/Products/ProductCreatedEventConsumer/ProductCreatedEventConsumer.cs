@@ -29,8 +29,7 @@ namespace OrdersService.Worker.Services.Products.ProductCreatedEventConsumer
                 Id = context.Message.Id
             };
 
-            _context.OrderProducts.Add(product);
-
+            await _context.OrderProducts.AddAsync(product);
             await _context.SaveChangesAsync();
 
             _logger.LogInformation($"Created product with ID {product.Id} with name {product.Name}.");

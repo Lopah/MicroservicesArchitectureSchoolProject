@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DemoApp.Core.Services.Orders;
+using DemoApp.Core.Services.Products;
+using DemoApp.Core.Services.Users;
 using DemoApp.Shared.Events.Orders;
 using DemoApp.Web.Models.Orders;
 using MassTransit;
@@ -11,26 +15,30 @@ namespace DemoApp.Web.Controllers
     public class OrderController : Controller
     {
         private readonly IOrderService _orderService;
+        private readonly IUserService _userService;
+        private readonly IProductService _productService;
         private readonly IPublishEndpoint _publishEndpoint;
 
-        public OrderController(IOrderService orderService, IPublishEndpoint publishEndpoint)
+        public OrderController(IOrderService orderService, IUserService userService, IProductService productService, IPublishEndpoint publishEndpoint)
         {
             _orderService = orderService;
+            _userService = userService;
+            _productService = productService;
             _publishEndpoint = publishEndpoint;
         }
 
         public async Task<IActionResult> Index()
         {
             var orders = await _orderService.GetAllOrdersAsync();
-
-            //TODO: ViewModel
-
-            return View();
+            var model = new OrdersViewModel(orders);
+            return View(model);
         }
 
-        public ActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var model = new CreateOrderViewModel();
+            var users = await _userService.GetAllUsersAsync();
+            var products = await _productService.GetAllProductsAsync();
+            var model = new CreateOrderViewModel(users, products);
             return View(model);
         }
 
@@ -40,9 +48,11 @@ namespace DemoApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                var filteredProducts = model.Products.Where(p => p.Amount > 0).ToList();
                 var userEvent = new CreateOrderEvent
                 {
-                    //TODO
+                    UserId = model.UserId,
+                    Products = filteredProducts.Select(p => new CreateOrderEvent.CreateOrderEventProductDto(p.Id, p.Amount)).ToList()
                 };
 
                 try
@@ -56,6 +66,8 @@ namespace DemoApp.Web.Controllers
                 }
             }
 
+            model.SetUserList(await _userService.GetAllUsersAsync());
+            model.SetProductList(await _productService.GetAllProductsAsync());
             return View(model);
         }
 

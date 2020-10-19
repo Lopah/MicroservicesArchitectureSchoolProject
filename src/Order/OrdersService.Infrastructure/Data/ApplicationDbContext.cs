@@ -10,12 +10,14 @@ namespace OrdersService.Infrastructure.Data
 
         }
         public DbSet<Order> Orders { get; set; }
+
+        public DbSet<OrderProductLink> OrderProductLinks { get; set; }
         public DbSet<OrderProduct> OrderProducts { get; set; }
         public DbSet<OrderUser> OrderUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         }
     }
 }

@@ -58,5 +58,15 @@ namespace DemoApp.Core.Services.Products
 
             return result.Deserialize<ProductDto>();
         }
+
+        public async Task DeleteProductAsync(Guid id)
+        {
+            var client = this.GetClient();
+            var response = await client.DeleteAsync($"api/products/{id}");
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception("Product service not available.");
+            }
+        }
     }
 }

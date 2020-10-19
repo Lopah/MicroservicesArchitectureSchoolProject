@@ -56,5 +56,16 @@ namespace DemoApp.Core.Services.Users
 
             return result.Deserialize<UserDto>();
         }
+
+        public async Task DeleteUserAsync(Guid id)
+        {
+            var client = this.GetClient();
+            var response = await client.DeleteAsync($"api/users/{id}");
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception("User service not available.");
+            }
+
+        }
     }
 }

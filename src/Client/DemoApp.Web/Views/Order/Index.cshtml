@@ -1,0 +1,65 @@
+﻿@model DemoApp.Web.Models.Orders.OrdersViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Orders</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            ID
+        </th>
+        <th>
+            User's name
+        </th>
+        <th>
+            Created On
+        </th>
+        <th>
+            Products Count
+        </th>
+        <th>
+            Total product items
+        </th>
+        <th>
+            Total price
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var order in Model.Orders)
+    {
+        <tr>
+            <td>
+                @order.OrderId
+            </td>
+            <td>
+                <a asp-action="Edit" asp-controller="User" asp-route-id="@order.UserId">@order.User</a>
+            </td>
+            <td>
+                @order.CreatedOn.ToShortDateString()
+            </td>
+            <td>
+                @order.Products.Count
+            </td>
+            <td>
+                @order.Products.Sum(p => p.Amount)
+            </td>
+            <td>
+                @order.TotalPrice CZK
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new {id = order.OrderId}) |
+                @Html.ActionLink("Delete", "Delete", new {id = order.OrderId})
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

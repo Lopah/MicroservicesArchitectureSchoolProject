@@ -9,5 +9,6 @@ namespace DemoApp.Core.Services.Users
     {
         Task<List<UserDto>> GetAllUsersAsync();
         Task<UserDto> GetUserAsync(Guid id);
+        Task DeleteUserAsync(Guid id);
     }
 }

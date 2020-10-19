@@ -8,6 +8,5 @@ namespace DemoApp.Shared.Config
         public string Hostname { get; set; }
         public string VirtualHost { get; set; }
         public ushort PrefetchCount { get; set; }
-        public string Endpoint { get; set; }
     }
 }

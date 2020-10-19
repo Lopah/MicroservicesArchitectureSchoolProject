@@ -33,7 +33,7 @@ namespace DemoApp.Core.Services.Orders
 
             var result = await response.Content.ReadAsStringAsync();
 
-            return JsonSerializer.Deserialize<List<OrderDto>>(result);
+            return result.Deserialize<List<OrderDto>>();
         }
 
         public async Task<OrderDto> GetOrderAsync(Guid id)
@@ -48,6 +48,20 @@ namespace DemoApp.Core.Services.Orders
             var result = await response.Content.ReadAsStringAsync();
 
             return result.Deserialize<OrderDto>();
+        }
+
+        public async Task<List<OrderDto>> GetOrdersForUserAsync(Guid id)
+        {
+            var client = this.GetClient();
+            var response = await client.GetAsync($"api/orders/user/{id}");
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception("Order service not available.");
+            }
+
+            var result = await response.Content.ReadAsStringAsync();
+
+            return result.Deserialize<List<OrderDto>>();
         }
 
         private HttpClient GetClient()

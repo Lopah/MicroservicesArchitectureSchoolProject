@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DemoApp.Shared.Config
 {
@@ -25,17 +26,15 @@ namespace DemoApp.Shared.Config
             dbContext?.Database.EnsureCreated();
         }
 
-        public static void ConfigureRabbitMq(this IServiceCollection services, RabbitMqSettings settings, List<Type> consumers = null)
+        public static void ConfigureRabbitMq(this IServiceCollection services, RabbitMqSettings settings, List<(string Endpoint, List<Type> ConsumerTypes)> consumers = null)
         {
             if(consumers is null)
-                consumers = new List<Type>();
+                consumers = new List<(string endpoint, List<Type>)>();
 
             services.AddMassTransit(options =>
             {
-                foreach (var consumer in consumers)
-                {
-                    options.AddConsumer(consumer);
-                }
+                var allConsumerTypes = consumers.Select(c => c.ConsumerTypes).SelectMany(c => c.ToArray()).ToArray();
+                options.AddConsumers(allConsumerTypes);
 
                 options.AddBus(busContext =>
                 {
@@ -47,16 +46,20 @@ namespace DemoApp.Shared.Config
                             hostOptions.Password(settings.Password);
                         });
 
-                        cfg.ReceiveEndpoint(settings.Endpoint, ep =>
+                        foreach (var consumer in consumers)
                         {
-                            //Configure Rabbitmq exchange properties
-                            ep.PrefetchCount = settings.PrefetchCount;
-
-                            foreach (var consumer in consumers)
+                            cfg.ReceiveEndpoint(consumer.Endpoint, ep =>
                             {
-                                ep.ConfigureConsumer(busContext, consumer);
-                            }
-                        });
+                                //Configure Rabbitmq exchange properties
+                                ep.PrefetchCount = settings.PrefetchCount;
+
+                                foreach (var consumerType in consumer.ConsumerTypes)
+                                {
+                                    ep.ConfigureConsumer(busContext, consumerType);
+                                }
+                            });
+                        }
+
                     });
 
                     bus.Start();

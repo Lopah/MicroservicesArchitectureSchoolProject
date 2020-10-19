@@ -20,12 +20,21 @@ namespace DemoApp.Worker
             var rabbitOptions = new RabbitMqSettings();
             configuration.GetSection("RabbitOptions").Bind(rabbitOptions);
 
-            var consumers = new List<Type>
-            {
-                typeof(UserCreatedConsumer),
-                typeof(ProductCreatedConsumer),
-                typeof(OrderCreatedConsumer)
-            };
+
+            var consumers = new List<(string endpoint, List<Type>)>();
+
+            var orderConsumers = new List<Type> {
+                typeof(OrderCreatedConsumer)};
+            consumers.Add(("orders", orderConsumers));
+
+            var productConsumers = new List<Type> {
+                typeof(ProductCreatedConsumer)};
+            consumers.Add(("products", productConsumers));
+
+            var userConsumers = new List<Type> {
+                typeof(UserCreatedConsumer)};
+            consumers.Add(("users", userConsumers));
+
             services.ConfigureRabbitMq(rabbitOptions, consumers);
         }
     }

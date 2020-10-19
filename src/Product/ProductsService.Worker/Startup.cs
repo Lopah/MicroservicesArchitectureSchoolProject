@@ -6,7 +6,11 @@ using Microsoft.Extensions.Hosting;
 using ProductsService.Infrastructure.Data;
 using System;
 using System.Collections.Generic;
-
+using ProductsService.Worker.Services.Orders.OrderCreatedConsumer;
+using ProductsService.Worker.Services.Orders.OrderDeletedConsumer;
+using ProductsService.Worker.Services.Products.CreateProductConsumer;
+using ProductsService.Worker.Services.Products.DeleteProductConsumer;
+using ProductsService.Worker.Services.Products.EditProductConsumer;
 using ProductServices = ProductsService.Worker.Services.Products;
 using OrderServices = ProductsService.Worker.Services.Orders;
 
@@ -24,14 +28,19 @@ namespace ProductsService.Worker
             var rabbitOptions = new RabbitMqSettings();
             configuration.GetSection("RabbitOptions").Bind(rabbitOptions);
 
-            var consumers = new List<Type> 
-            { 
-                typeof(ProductServices.CreateProductConsumer.CreateProductConsumer),
-                typeof(ProductServices.EditProductConsumer.EditProductConsumer),
-                typeof(ProductServices.DeleteProductConsumer.DeleteProductConsumer),
-                typeof(OrderServices.OrderCreatedConsumer.OrderCreatedConsumer),
-                typeof(OrderServices.OrderDeletedConsumer.OrderDeletedConsumer)
-            };
+
+            var consumers = new List<(string endpoint, List<Type>)>();
+
+            var productConsumers = new List<Type> {
+                typeof(CreateProductConsumer),
+                typeof(EditProductConsumer),
+                typeof(DeleteProductConsumer)};
+            consumers.Add(("products", productConsumers));
+
+            var orderConsumers = new List<Type> {
+                typeof(OrderCreatedConsumer),
+                typeof(OrderDeletedConsumer)};
+            consumers.Add(("orders", orderConsumers));
 
             services.ConfigureRabbitMq(rabbitOptions, consumers);
         }

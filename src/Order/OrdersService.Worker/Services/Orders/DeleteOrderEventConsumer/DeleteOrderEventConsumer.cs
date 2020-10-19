@@ -25,8 +25,7 @@ namespace OrdersService.Worker.Services.Orders.DeleteOrderEventConsumer
             _logger.LogInformation($"Processing msg: '{context.MessageId}' with topic: '{context.ConversationId}'.");
 
             var order = await _context.Orders
-                .Include(e => e.OrderProducts)
-                .Include(e => e.OrderUser)
+                .Include(o => o.OrderProducts)
                 .FirstOrDefaultAsync(e => e.Id == context.Message.Id);
 
             _context.Remove(order);
@@ -39,7 +38,7 @@ namespace OrdersService.Worker.Services.Orders.DeleteOrderEventConsumer
                 Products = order.OrderProducts.Select(e => new OrderDeletedEvent.ProductDto
                 {
                     Amount = e.Amount,
-                    Id = e.Id
+                    Id = e.ProductId
                 }).ToList(),
                 Id = order.Id
             });

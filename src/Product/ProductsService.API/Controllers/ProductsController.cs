@@ -10,31 +10,43 @@ namespace ProductsService.API.Controllers
     [ApiController]
     public class ProductsController : Controller
     {
-        private readonly ApplicationDbContext applicationDbContext;
+        private readonly ApplicationDbContext _dbContext;
 
-        public ProductsController(ApplicationDbContext applicationDbContext)
+        public ProductsController(ApplicationDbContext dbContext)
         {
-            this.applicationDbContext = applicationDbContext;
+            this._dbContext = dbContext;
         }
 
-        // GET: api/Products
         [HttpGet]
-        public  async Task<IActionResult> Get()
+        public  async Task<IActionResult> GetAll()
         {
-            var products = await applicationDbContext.Products.ToListAsync();
+            var products = await _dbContext.Products.ToListAsync();
 
             return Json(products);
         }
 
-        // GET: api/Products/5
-        [HttpGet("{id}", Name = "Get")]
-        public async Task<IActionResult> Get(Guid id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetOne(Guid id)
         {
-            var product = await applicationDbContext.Products.FirstOrDefaultAsync(x => x.Id == id);
+            var product = await _dbContext.Products.FirstOrDefaultAsync(x => x.Id == id);
             if (product == null)
-                return BadRequest();
+                return NotFound();
 
             return Json(product);
+        }
+
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var product = await _dbContext.Products.FirstOrDefaultAsync(x => x.Id == id);
+            if (product == null)
+                return NotFound();
+
+            _dbContext.Products.Remove(product);
+            await _dbContext.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }

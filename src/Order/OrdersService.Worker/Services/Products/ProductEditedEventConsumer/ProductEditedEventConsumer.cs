@@ -28,8 +28,6 @@ namespace OrdersService.Worker.Services.Products.ProductEditedEventConsumer
             product.Price = context.Message.Price;
             product.Name = context.Message.Name;
 
-            _context.OrderProducts.Update(product);
-
             await _context.SaveChangesAsync( );
 
             _logger.LogInformation($"Edited user with ID {product.Id} with name: {product.Name}");

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace DemoApp.Core.Models.Orders
+namespace OrdersService.API.Models
 {
     public class OrderDto
     {
@@ -18,6 +18,13 @@ namespace DemoApp.Core.Models.Orders
             public ProductDto()
             {
 
+            }
+            public ProductDto(Guid id, string name, decimal price, int amount)
+            {
+                Id = id;
+                Name = name;
+                Price = price;
+                Amount = amount;
             }
 
             public Guid Id { get; set; }

@@ -30,17 +30,25 @@ namespace OrdersService.Worker
             var rabbitOptions = new RabbitMqSettings( );
             Configuration.GetSection("RabbitOptions").Bind(rabbitOptions);
 
-            var consumers = new List<Type>
-            {
+            var consumers = new List<(string endpoint, List<Type>)>();
+
+            var orderConsumers = new List<Type> {
                 typeof(CreateOrderEventConsumer),
-                typeof(DeleteOrderEventConsumer),
+                typeof(DeleteOrderEventConsumer)};
+            consumers.Add(("orders", orderConsumers));
+
+            var productConsumers = new List<Type> {
                 typeof(ProductCreatedEventConsumer),
                 typeof(ProductEditedEventConsumer),
-                typeof(ProductDeletedEventConsumer),
+                typeof(ProductDeletedEventConsumer)};
+            consumers.Add(("products", productConsumers));
+
+            var userConsumers = new List<Type> {
                 typeof(UserCreatedEventConsumer),
                 typeof(UserEditedEventConsumer),
-                typeof(UserDeletedEventConsumer)
-            };
+                typeof(UserDeletedEventConsumer)};
+            consumers.Add(("users", userConsumers));
+
             services.ConfigureRabbitMq(rabbitOptions, consumers);
         }
     }

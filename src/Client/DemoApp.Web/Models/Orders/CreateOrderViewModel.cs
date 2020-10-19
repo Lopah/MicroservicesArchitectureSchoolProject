@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DemoApp.Web.Models.Orders
 {
-    public class CreateOrderViewModel
+    public class CreateOrderViewModel: BaseViewModel
     {
         public CreateOrderViewModel()
         {

@@ -21,10 +21,11 @@ namespace DemoApp.Web.Controllers
             _publishEndpoint = publishEndpoint;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(bool success = false)
         {
             var users = await _userService.GetAllUsersAsync();
             var model = new UsersViewModel(users);
+            model.ShowSuccess = success;
             return View(model);
         }
 
@@ -50,7 +51,7 @@ namespace DemoApp.Web.Controllers
                 try
                 {
                     await _publishEndpoint.Publish<CreateUserEvent>(userEvent);
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index), new { success = true });
                 }
                 catch
                 {
@@ -88,7 +89,7 @@ namespace DemoApp.Web.Controllers
                 try
                 {
                     await _publishEndpoint.Publish<EditUserEvent>(userEvent);
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index), new { success = true });
                 }
                 catch
                 {
@@ -109,7 +110,7 @@ namespace DemoApp.Web.Controllers
             try
             {
                 await _publishEndpoint.Publish<DeleteUserEvent>(userEvent);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { success = true });
             }
             catch
             {

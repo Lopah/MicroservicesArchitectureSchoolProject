@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using DemoApp.Web.Models;
+using DemoApp.Web.Models.Home;
 
 namespace DemoApp.Web.Controllers
 {
@@ -18,14 +19,17 @@ namespace DemoApp.Web.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(bool success = false)
         {
-            return View( );
+            var model = new HomeIndexViewModel();
+            model.ShowSuccess = success;
+            return View( model );
         }
 
         public IActionResult Privacy()
         {
-            return View( );
+            var model = new PrivacyViewModel();
+            return View( model );
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

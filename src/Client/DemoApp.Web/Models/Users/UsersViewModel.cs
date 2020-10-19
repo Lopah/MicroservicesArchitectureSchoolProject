@@ -3,7 +3,7 @@ using DemoApp.Core.Models.Users;
 
 namespace DemoApp.Web.Models.Users
 {
-    public class UsersViewModel
+    public class UsersViewModel: BaseViewModel
     {
         public UsersViewModel(List<UserDto> users)
         {

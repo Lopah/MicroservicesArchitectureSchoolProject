@@ -3,7 +3,7 @@ using DemoApp.Core.Models.Products;
 
 namespace DemoApp.Web.Models.Products
 {
-    public class EditProductViewModel
+    public class EditProductViewModel: BaseViewModel
     {
 
         public EditProductViewModel()

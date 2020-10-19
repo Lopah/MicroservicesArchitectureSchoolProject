@@ -1,9 +1,10 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using DemoApp.Core.Models.Users;
 
 namespace DemoApp.Web.Models.Users
 {
-    public class EditUserViewModel
+    public class EditUserViewModel: BaseViewModel
     {
         public EditUserViewModel()
         {
@@ -17,7 +18,9 @@ namespace DemoApp.Web.Models.Users
             this.Name = data.Password;
         }
         public Guid Id { get; set; }
+        [MinLength(2)]
         public string Username { get; set; }
+        [DataType(DataType.Password)]
         public string Password { get; set; }
         public string Name { get; set; }
     }

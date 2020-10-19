@@ -27,10 +27,11 @@ namespace DemoApp.Web.Controllers
             _publishEndpoint = publishEndpoint;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(bool success = false)
         {
             var orders = await _orderService.GetAllOrdersAsync();
             var model = new OrdersViewModel(orders);
+            model.ShowSuccess = success;
             return View(model);
         }
 
@@ -58,7 +59,7 @@ namespace DemoApp.Web.Controllers
                 try
                 {
                     await _publishEndpoint.Publish<CreateOrderEvent>(userEvent);
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index), new { success = true });
                 }
                 catch
                 {
@@ -81,7 +82,7 @@ namespace DemoApp.Web.Controllers
             try
             {
                 await _publishEndpoint.Publish<DeleteOrderEvent>(userEvent);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { success = true });
             }
             catch
             {

@@ -3,7 +3,7 @@ using DemoApp.Core.Models.Products;
 
 namespace DemoApp.Web.Models.Products
 {
-    public class ProductsViewModel
+    public class ProductsViewModel: BaseViewModel
     {
         public ProductsViewModel(List<ProductDto> data)
         {

@@ -26,10 +26,11 @@ namespace DemoApp.Web.Controllers
             _publishEndpoint = publishEndpoint;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(bool success = false)
         {
             var products = await _productService.GetAllProductsAsync();
             var model = new ProductsViewModel(products);
+            model.ShowSuccess = success;
             return View(model);
         }
 
@@ -55,7 +56,7 @@ namespace DemoApp.Web.Controllers
                 try
                 {
                     await _publishEndpoint.Publish<CreateProductEvent>(productEvent);
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index), new { success = true });
                 }
                 catch
                 {
@@ -93,7 +94,7 @@ namespace DemoApp.Web.Controllers
                 try
                 {
                     await _publishEndpoint.Publish<EditProductEvent>(productEvent);
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index), new { success = true });
                 }
                 catch
                 {
@@ -114,7 +115,7 @@ namespace DemoApp.Web.Controllers
             try
             {
                 await _publishEndpoint.Publish<DeleteProductEvent>(productEvent);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { success = true });
             }
             catch
             {

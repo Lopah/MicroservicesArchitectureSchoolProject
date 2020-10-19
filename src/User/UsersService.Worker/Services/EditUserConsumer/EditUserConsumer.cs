@@ -31,7 +31,10 @@ namespace UsersService.Worker.Services.EditUserConsumer
 
                 dbUser.Name = user.Name;
                 dbUser.Username = user.Username;
-                dbUser.Password = user.Password;
+                if (!string.IsNullOrWhiteSpace(user.Password))
+                {
+                    dbUser.Password = user.Password;
+                }
 
                 await _dbContext.SaveChangesAsync();
 

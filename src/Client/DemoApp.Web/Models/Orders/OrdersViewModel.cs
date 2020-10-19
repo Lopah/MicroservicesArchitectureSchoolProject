@@ -3,7 +3,7 @@ using DemoApp.Core.Models.Orders;
 
 namespace DemoApp.Web.Models.Orders
 {
-    public class OrdersViewModel
+    public class OrdersViewModel: BaseViewModel
     {
         public OrdersViewModel(List<OrderDto> orders)
         {
